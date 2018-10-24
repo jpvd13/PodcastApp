@@ -1,0 +1,10 @@
+C:\Users\JD\Documents\Systemvetenskap\HT18\Delkurs 2 C# .NET ASP\Kursträff 5\WindowsFormsApp1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.csprojAssemblyReference.cache
+C:\Users\JD\Documents\Systemvetenskap\HT18\Delkurs 2 C# .NET ASP\Kursträff 5\WindowsFormsApp1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Form1.resources
+C:\Users\JD\Documents\Systemvetenskap\HT18\Delkurs 2 C# .NET ASP\Kursträff 5\WindowsFormsApp1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Properties.Resources.resources
+C:\Users\JD\Documents\Systemvetenskap\HT18\Delkurs 2 C# .NET ASP\Kursträff 5\WindowsFormsApp1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.csproj.GenerateResource.cache
+C:\Users\JD\Documents\Systemvetenskap\HT18\Delkurs 2 C# .NET ASP\Kursträff 5\WindowsFormsApp1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.csproj.CoreCompileInputs.cache
+C:\Users\JD\Documents\Systemvetenskap\HT18\Delkurs 2 C# .NET ASP\Kursträff 5\WindowsFormsApp1\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe.config
+C:\Users\JD\Documents\Systemvetenskap\HT18\Delkurs 2 C# .NET ASP\Kursträff 5\WindowsFormsApp1\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe
+C:\Users\JD\Documents\Systemvetenskap\HT18\Delkurs 2 C# .NET ASP\Kursträff 5\WindowsFormsApp1\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.pdb
+C:\Users\JD\Documents\Systemvetenskap\HT18\Delkurs 2 C# .NET ASP\Kursträff 5\WindowsFormsApp1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
+C:\Users\JD\Documents\Systemvetenskap\HT18\Delkurs 2 C# .NET ASP\Kursträff 5\WindowsFormsApp1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
