@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\PodcastApp",
+    "\\PodcastApp\\bin",
+    "\\PodcastApp\\Business logics",
+    "\\PodcastApp\\DataLayer",
+    "\\PodcastApp\\Entities",
+    "\\PodcastApp\\GUI"
+  ],
+  "SelectedNode": "\\PodcastApp\\DataLayer\\XmlReader.cs",
+  "PreviewInSolutionExplorer": false
+}

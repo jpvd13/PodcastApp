@@ -20,7 +20,16 @@ namespace WindowsFormsApp1
             InitializeComponent();
             //cbbCategories.DropDownStyle = ComboBoxStyle.DropDownList;
             cbbFrequency.DropDownStyle = ComboBoxStyle.DropDownList;
-            
+
+
+            var xr = new XmlReader();
+            List<Podcast> pod = xr.LoadPodcastXml();
+            foreach (var p in pod)
+            {
+                SetListFeed(p);
+            }
+
+
 
         }
 
@@ -31,13 +40,12 @@ namespace WindowsFormsApp1
 
         public string getTextUrl()
         {
-            InputTxtUrl = txtFeedUrl.Text;
-            return InputTxtUrl;
+            return txtFeedUrl.Text;
         }
 
         public void SetListFeed(Podcast pod)
         {
-            pod = new Podcast(pod.PodTitle, pod.Frequency, pod.Category, pod.EpisodeTitles, pod.EpisodeDescriptions);
+            
             string[] row = { pod.PodTitle, pod.Category, pod.EpisodeTitles.Count.ToString(), pod.Frequency };
             ListViewItem list = new ListViewItem(row);
             lvFeeds.Items.Add(list);
@@ -56,7 +64,7 @@ namespace WindowsFormsApp1
 
         private void lvFeeds_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DataRetriever retriever = new DataRetriever();    
+            RssRetriever retriever = new RssRetriever();    
             
             foreach (var epi in retriever.GetEpisodes())
             {
@@ -67,29 +75,21 @@ namespace WindowsFormsApp1
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
-        {          
-            DataRetriever retriever = new DataRetriever();
-            XmlWriter xw = new XmlWriter();
-            Podcast pod = new Podcast(retriever.GetPodcastTitle(), cbbFrequency.Text, cbbCategories.Text, retriever.GetEpisodes(), retriever.GetDescriptions());
-
-            
-            xw.CreateXml(pod);
-
+        {
+            DirectoryCreator dc = new DirectoryCreator();
+            dc.CreateMainDirectory();
+           
+            RssRetriever retriever = new RssRetriever();
+            Podcast pod = new Podcast(retriever.GetPodcastTitleFromRss(), cbbFrequency.Text, cbbCategories.Text, retriever.GetEpisodes(), retriever.GetDescriptions());
             SetListFeed(pod);
 
-
+            XmlWriter xw = new XmlWriter();
+            xw.CreateXml(pod);
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            var dre = new DataRetriever();            
 
-            List<Podcast> pod = dre.LoadPodcastXml();
-
-            foreach (var p in pod)
-            {
-                SetListFeed(p);
-            }
         }
     }
 }

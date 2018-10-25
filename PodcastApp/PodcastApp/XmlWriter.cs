@@ -35,9 +35,9 @@ namespace WindowsFormsApp1
             }
             StringWriter sw = new StringWriter();
             xDoc.Save(sw);
-            DataRetriever dr = new DataRetriever();
-            string path = dr.GetMainDirectory();
-            string newPodTitle = dr.RemoveSpecialChars(pod.PodTitle);
+            StringManipulator sm = new StringManipulator();
+            string path = new DirectoryCreator().CreateMainDirectory();
+            string newPodTitle = sm.RemoveSpecialChars(pod.PodTitle);
             xDoc.Save(path + @"\" + newPodTitle + ".xml");
         }
     }
