@@ -25,8 +25,8 @@ namespace WindowsFormsApp1
             var xr = new XmlReader();
             List<Podcast> pod = xr.LoadPodcastXml();
             foreach (var p in pod)
-            {
-                SetListFeed(p);
+            {           
+                SetListFeed(p);            
             }
 
 
@@ -46,7 +46,7 @@ namespace WindowsFormsApp1
         public void SetListFeed(Podcast pod)
         {
             
-            string[] row = { pod.PodTitle, pod.Category, pod.EpisodeTitles.Count.ToString(), pod.Frequency };
+            string[] row = { pod.PodTitle, pod.Category, pod.NumberOfEpisodes.ToString(), pod.Frequency };
             ListViewItem list = new ListViewItem(row);
             lvFeeds.Items.Add(list);
 
@@ -64,13 +64,20 @@ namespace WindowsFormsApp1
 
         private void lvFeeds_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RssRetriever retriever = new RssRetriever();    
-            
-            foreach (var epi in retriever.GetEpisodes())
+            lwEpisodes.Items.Clear();
+
+            if (lvFeeds.SelectedItems.Count > 0)
             {
-                string[] row = { epi };
-                ListViewItem list = new ListViewItem(row);
-                lwEpisodes.Items.Add(list);
+                string title = lvFeeds.SelectedItems[0].SubItems[0].Text;
+                XmlReader xr = new XmlReader();
+                List<Episode> episodes = new List<Episode>(xr.GetEpisodesByPodcastTitleXml(title));
+                
+                foreach (var episode in episodes)
+                {
+                    string[] row = { episode.Title };
+                    ListViewItem list = new ListViewItem(row);
+                    lwEpisodes.Items.Add(list);
+                }
             }
         }
 
@@ -79,8 +86,9 @@ namespace WindowsFormsApp1
             DirectoryCreator dc = new DirectoryCreator();
             dc.CreateMainDirectory();
            
-            RssRetriever retriever = new RssRetriever();
-            Podcast pod = new Podcast(retriever.GetPodcastTitleFromRss(), cbbFrequency.Text, cbbCategories.Text, retriever.GetEpisodes(), retriever.GetDescriptions());
+            RssRetriever retriever = new RssRetriever(getTextUrl());
+            var episodes = retriever.GetEpisodes();
+            Podcast pod = new Podcast(retriever.GetPodcastTitleFromRss(), cbbFrequency.Text, cbbCategories.Text, episodes, episodes.Count());
             SetListFeed(pod);
 
             XmlWriter xw = new XmlWriter();

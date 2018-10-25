@@ -15,16 +15,17 @@ namespace WindowsFormsApp1
     {
         readonly string MainFolder;
         XmlDocument doc = new XmlDocument(); 
-
-        public RssRetriever()
+        
+        public RssRetriever(string url)
         {  
             MainFolder = new DirectoryCreator().CreateMainDirectory();
             Form1 form = new Form1();
-            doc.Load(form.getTextUrl());
+            doc.Load(url);
             SaveOriginalFeedXml();
         }
+   
 
-  
+
         // Saves original xml file to specified directory with same name as file
         public void SaveOriginalFeedXml()
         {
@@ -57,18 +58,19 @@ namespace WindowsFormsApp1
         } 
 
         // Returns a list of episodes in specified podcast xml
-        public List <string> GetEpisodes()
+        public List <Episode> GetEpisodes()
         {
-            List<string> episodes = new List<string>();
+            List<Episode> episodes = new List<Episode>();
             XmlNodeList item = doc.SelectNodes("//item");
 
 
             var i = 0;
             foreach (var items in item)
             {
-                episodes.Add(item[i].SelectSingleNode("title").InnerText);
+                string title = item[i].SelectSingleNode("title").InnerText;
+                string description = item[i].SelectSingleNode("description").InnerText;
+                episodes.Add(new Episode(title, description));
                 i++;
-
             }
             return episodes;
         }

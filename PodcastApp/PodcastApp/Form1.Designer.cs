@@ -56,6 +56,7 @@
             // 
             // lvFeeds
             // 
+            this.lvFeeds.Activation = System.Windows.Forms.ItemActivation.OneClick;
             this.lvFeeds.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
@@ -63,7 +64,8 @@
             this.columnHeader4});
             this.lvFeeds.GridLines = true;
             this.lvFeeds.Location = new System.Drawing.Point(16, 15);
-            this.lvFeeds.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.lvFeeds.Margin = new System.Windows.Forms.Padding(4);
+            this.lvFeeds.MultiSelect = false;
             this.lvFeeds.Name = "lvFeeds";
             this.lvFeeds.Size = new System.Drawing.Size(472, 194);
             this.lvFeeds.TabIndex = 0;
@@ -96,7 +98,7 @@
             this.columnHeader5});
             this.lwEpisodes.GridLines = true;
             this.lwEpisodes.Location = new System.Drawing.Point(16, 321);
-            this.lwEpisodes.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.lwEpisodes.Margin = new System.Windows.Forms.Padding(4);
             this.lwEpisodes.Name = "lwEpisodes";
             this.lwEpisodes.Size = new System.Drawing.Size(472, 243);
             this.lwEpisodes.TabIndex = 1;
@@ -113,7 +115,7 @@
             // 
             this.lwCategories.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lwCategories.Location = new System.Drawing.Point(553, 34);
-            this.lwCategories.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.lwCategories.Margin = new System.Windows.Forms.Padding(4);
             this.lwCategories.Name = "lwCategories";
             this.lwCategories.Size = new System.Drawing.Size(315, 174);
             this.lwCategories.TabIndex = 2;
@@ -122,7 +124,7 @@
             // btnAdd
             // 
             this.btnAdd.Location = new System.Drawing.Point(173, 286);
-            this.btnAdd.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnAdd.Margin = new System.Windows.Forms.Padding(4);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(100, 28);
             this.btnAdd.TabIndex = 4;
@@ -134,7 +136,7 @@
             // 
             this.cbbCategories.FormattingEnabled = true;
             this.cbbCategories.Location = new System.Drawing.Point(173, 252);
-            this.cbbCategories.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbbCategories.Margin = new System.Windows.Forms.Padding(4);
             this.cbbCategories.Name = "cbbCategories";
             this.cbbCategories.Size = new System.Drawing.Size(144, 24);
             this.cbbCategories.TabIndex = 5;
@@ -149,7 +151,7 @@
             "30 min",
             "60 min"});
             this.cbbFrequency.Location = new System.Drawing.Point(328, 252);
-            this.cbbFrequency.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbbFrequency.Margin = new System.Windows.Forms.Padding(4);
             this.cbbFrequency.Name = "cbbFrequency";
             this.cbbFrequency.Size = new System.Drawing.Size(160, 24);
             this.cbbFrequency.TabIndex = 6;
@@ -158,7 +160,7 @@
             // btnDelete
             // 
             this.btnDelete.Location = new System.Drawing.Point(389, 286);
-            this.btnDelete.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnDelete.Margin = new System.Windows.Forms.Padding(4);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(100, 28);
             this.btnDelete.TabIndex = 7;
@@ -168,7 +170,7 @@
             // btnUpdate
             // 
             this.btnUpdate.Location = new System.Drawing.Point(281, 286);
-            this.btnUpdate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnUpdate.Margin = new System.Windows.Forms.Padding(4);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(100, 28);
             this.btnUpdate.TabIndex = 8;
@@ -180,7 +182,7 @@
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.Location = new System.Drawing.Point(661, 252);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(100, 28);
             this.button1.TabIndex = 11;
@@ -191,7 +193,7 @@
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.Location = new System.Drawing.Point(769, 252);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(100, 28);
             this.button2.TabIndex = 10;
@@ -202,7 +204,7 @@
             // 
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button3.Location = new System.Drawing.Point(553, 252);
-            this.button3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button3.Margin = new System.Windows.Forms.Padding(4);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(100, 28);
             this.button3.TabIndex = 9;
@@ -213,7 +215,7 @@
             // 
             this.txtCategory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtCategory.Location = new System.Drawing.Point(553, 219);
-            this.txtCategory.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtCategory.Margin = new System.Windows.Forms.Padding(4);
             this.txtCategory.Name = "txtCategory";
             this.txtCategory.Size = new System.Drawing.Size(315, 22);
             this.txtCategory.TabIndex = 12;
@@ -312,7 +314,7 @@
             this.Controls.Add(this.lwCategories);
             this.Controls.Add(this.lwEpisodes);
             this.Controls.Add(this.lvFeeds);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);

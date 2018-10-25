@@ -21,8 +21,7 @@ namespace WindowsFormsApp1
         {
             string[] files = Directory.GetFiles(MainFolder, "*", SearchOption.TopDirectoryOnly);
             List<Podcast> podcasts = new List<Podcast>();
-            List<string> descriptions = new List<string>();
-            List<string> titles = new List<string>();
+            List<Episode> episodes = new List<Episode>();
 
             XmlDocument xDoc = new XmlDocument();
 
@@ -34,8 +33,9 @@ namespace WindowsFormsApp1
                 int i = 0;
                 foreach (var item in items)
                 {
-                    descriptions.Add(items[i].SelectSingleNode("description").InnerText);
-                    titles.Add(items[i].SelectSingleNode("title").InnerText);
+                    string episodeDescription = items[i].SelectSingleNode("description").InnerText;
+                    string episodeTitle = items[i].SelectSingleNode("title").InnerText;
+                    episodes.Add(new Episode(episodeTitle, episodeDescription));
 
                     i++;
                 }
@@ -53,15 +53,52 @@ namespace WindowsFormsApp1
                     category = title[x].SelectSingleNode("category").InnerText;
                     frequency = title[x].SelectSingleNode("frequency").InnerText;
 
-
-                    x++;
+                   x++;
                 }
 
 
-                var pod = new Podcast(podcastTitle, frequency, category, titles, descriptions);
+                var pod = new Podcast(podcastTitle, frequency, category, episodes, episodes.Count());
                 podcasts.Add(pod);
+                episodes.Clear();
             }
             return podcasts;
+        }
+
+        public List<Episode> GetEpisodesByPodcastTitleXml(string title)
+        {
+            StringManipulator sm = new StringManipulator();
+            string titleNoSpecialChars = sm.RemoveSpecialChars(title);
+            string[] files = Directory.GetFiles(MainFolder, "*", SearchOption.TopDirectoryOnly);
+            List<Episode> episodes = new List<Episode>();
+            XmlDocument xDoc = new XmlDocument();
+
+            var isFound = false;
+            var i = 0;
+            while (!isFound)
+            {
+                if (files[i].ToString().Contains(titleNoSpecialChars))
+                {
+                    xDoc.Load(files[i]);
+                    isFound = true;
+                }
+             i++;
+            }
+
+            
+            
+
+            XmlNodeList items = xDoc.SelectNodes("//item");
+
+            int x = 0;
+            foreach (var item in items)
+            {
+              string episodeTitle = items[x].SelectSingleNode("title").InnerText;
+              string episodeDescription = items[x].SelectSingleNode("description").InnerText;
+               episodes.Add(new Episode(episodeTitle, episodeDescription));
+                x++;
+            }
+
+            return episodes;
         }
     }
 }

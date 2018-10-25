@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Category.cs" />
+    <Compile Include="Episode.cs" />
     <Compile Include="RssRetriever.cs" />
     <Compile Include="DirectoryCreator.cs" />
     <Compile Include="Form1.cs">

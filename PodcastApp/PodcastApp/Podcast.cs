@@ -11,28 +11,17 @@ namespace WindowsFormsApp1
         public string PodTitle { get; set; }
         public string Frequency { get; set; }
         public string Category { get; set; }
-        public List<string> EpisodeTitles { get; set; }
-        public List<string> EpisodeDescriptions { get; set; }
-        public int EpisodeCount { get; set; }
-           
+        public List<Episode> Episodes { get; set; }
 
-        public Podcast(string podTitle, string frequency, string category, List<string> episodeTitles, List<string> episodeDescriptions)
+        public int NumberOfEpisodes { get; set; }   
+
+        public Podcast(string podTitle, string frequency, string category, List<Episode> episodes, int numberOfEpisodes)
         {
             PodTitle = podTitle;
             Frequency = frequency;
             Category = category;
-            EpisodeTitles = episodeTitles;
-            EpisodeDescriptions = episodeDescriptions;
-
-        }
-
-        public Podcast(string podTitle, string frequency, string category)
-        {
-            PodTitle = podTitle;
-            Frequency = frequency;
-            Category = category;
-           
-
+            Episodes = episodes;
+            NumberOfEpisodes = numberOfEpisodes;
         }
 
 

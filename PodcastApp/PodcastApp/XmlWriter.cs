@@ -26,11 +26,11 @@ namespace WindowsFormsApp1
                             new XElement("category", pod.Category),
                             new XElement("frequency", pod.Frequency)));
 
-            for (var i = 0; i < pod.EpisodeTitles.Count; i++)
+            for (var i = 0; i < pod.Episodes.Count; i++)
             {
                 xDoc.Root.Add(new XElement("item",
-                    new XElement("title", pod.EpisodeTitles[i]),
-                    new XElement("description", pod.EpisodeDescriptions[i])
+                    new XElement("title", pod.Episodes[i].Title),
+                    new XElement("description", pod.Episodes[i].Description)
                     ));
             }
             StringWriter sw = new StringWriter();
