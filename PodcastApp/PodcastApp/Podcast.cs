@@ -12,11 +12,12 @@ namespace WindowsFormsApp1
         public string Frequency { get; set; }
         public string Category { get; set; }
         public List<Episode> Episodes { get; set; }
-
+        public string Url { get; set; }
         public int NumberOfEpisodes { get; set; }   
 
-        public Podcast(string podTitle, string frequency, string category, List<Episode> episodes, int numberOfEpisodes)
+        public Podcast(string url, string podTitle, string frequency, string category, List<Episode> episodes, int numberOfEpisodes)
         {
+            Url = url;
             PodTitle = podTitle;
             Frequency = frequency;
             Category = category;
@@ -24,6 +25,7 @@ namespace WindowsFormsApp1
             NumberOfEpisodes = numberOfEpisodes;
         }
 
+        
 
     }
     

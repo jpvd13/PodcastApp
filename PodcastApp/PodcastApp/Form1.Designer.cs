@@ -45,13 +45,14 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.txtCategory = new System.Windows.Forms.TextBox();
-            this.lblTitleDesc = new System.Windows.Forms.Label();
-            this.lblDescription = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.txtFeedUrl = new System.Windows.Forms.TextBox();
+            this.lblTitleDesc = new System.Windows.Forms.Label();
+            this.tbEpisodeDesc = new System.Windows.Forms.TextBox();
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // lvFeeds
@@ -95,10 +96,12 @@
             // 
             this.lwEpisodes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lwEpisodes.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader5});
+            this.columnHeader5,
+            this.columnHeader6});
             this.lwEpisodes.GridLines = true;
             this.lwEpisodes.Location = new System.Drawing.Point(16, 321);
             this.lwEpisodes.Margin = new System.Windows.Forms.Padding(4);
+            this.lwEpisodes.MultiSelect = false;
             this.lwEpisodes.Name = "lwEpisodes";
             this.lwEpisodes.Size = new System.Drawing.Size(472, 243);
             this.lwEpisodes.TabIndex = 1;
@@ -210,6 +213,7 @@
             this.button3.TabIndex = 9;
             this.button3.Text = "Add";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // txtCategory
             // 
@@ -219,26 +223,6 @@
             this.txtCategory.Name = "txtCategory";
             this.txtCategory.Size = new System.Drawing.Size(315, 22);
             this.txtCategory.TabIndex = 12;
-            // 
-            // lblTitleDesc
-            // 
-            this.lblTitleDesc.AutoSize = true;
-            this.lblTitleDesc.Location = new System.Drawing.Point(549, 372);
-            this.lblTitleDesc.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblTitleDesc.Name = "lblTitleDesc";
-            this.lblTitleDesc.Size = new System.Drawing.Size(49, 17);
-            this.lblTitleDesc.TabIndex = 13;
-            this.lblTitleDesc.Text = "lblTitle";
-            // 
-            // lblDescription
-            // 
-            this.lblDescription.AutoSize = true;
-            this.lblDescription.Location = new System.Drawing.Point(552, 406);
-            this.lblDescription.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblDescription.Name = "lblDescription";
-            this.lblDescription.Size = new System.Drawing.Size(46, 17);
-            this.lblDescription.TabIndex = 14;
-            this.lblDescription.Text = "label2";
             // 
             // label1
             // 
@@ -290,17 +274,42 @@
             this.txtFeedUrl.Size = new System.Drawing.Size(131, 22);
             this.txtFeedUrl.TabIndex = 20;
             // 
+            // lblTitleDesc
+            // 
+            this.lblTitleDesc.AutoSize = true;
+            this.lblTitleDesc.Location = new System.Drawing.Point(549, 335);
+            this.lblTitleDesc.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblTitleDesc.Name = "lblTitleDesc";
+            this.lblTitleDesc.Size = new System.Drawing.Size(0, 17);
+            this.lblTitleDesc.TabIndex = 13;
+            // 
+            // tbEpisodeDesc
+            // 
+            this.tbEpisodeDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tbEpisodeDesc.Location = new System.Drawing.Point(552, 366);
+            this.tbEpisodeDesc.Multiline = true;
+            this.tbEpisodeDesc.Name = "tbEpisodeDesc";
+            this.tbEpisodeDesc.ReadOnly = true;
+            this.tbEpisodeDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tbEpisodeDesc.Size = new System.Drawing.Size(277, 147);
+            this.tbEpisodeDesc.TabIndex = 22;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "id";
+            this.columnHeader6.Width = 0;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(885, 580);
+            this.Controls.Add(this.tbEpisodeDesc);
             this.Controls.Add(this.txtFeedUrl);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.lblDescription);
             this.Controls.Add(this.lblTitleDesc);
             this.Controls.Add(this.txtCategory);
             this.Controls.Add(this.button1);
@@ -338,8 +347,6 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.TextBox txtCategory;
-        private System.Windows.Forms.Label lblTitleDesc;
-        private System.Windows.Forms.Label lblDescription;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
@@ -347,6 +354,9 @@
         private System.Windows.Forms.ListView lvFeeds;
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.TextBox txtFeedUrl;
+        private System.Windows.Forms.Label lblTitleDesc;
+        private System.Windows.Forms.TextBox tbEpisodeDesc;
+        private System.Windows.Forms.ColumnHeader columnHeader6;
     }
 }
 

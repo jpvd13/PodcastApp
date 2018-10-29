@@ -22,5 +22,21 @@ namespace WindowsFormsApp1
             return sb.ToString();
         }
 
-    }
+        public static string EscapeXMLValue(string xmlString)
+        {
+
+            if (xmlString == null)
+                throw new ArgumentNullException("xmlString");
+
+               return xmlString.Replace("&", "&amp;");
+        }
+
+        public static string UnescapeXMLValue(string xmlString)
+        {
+            if (xmlString == null)
+                throw new ArgumentNullException("xmlString");
+
+            return xmlString.Replace("&amp;", "&");
+        }
+    } 
 }

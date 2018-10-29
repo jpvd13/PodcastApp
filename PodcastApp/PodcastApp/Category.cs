@@ -8,5 +8,11 @@ namespace WindowsFormsApp1
 {
     class Category
     {
+        public string Name;
+        
+        public Category(string name)
+        {
+            Name = name;
+        }
     }
 }

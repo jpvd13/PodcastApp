@@ -68,7 +68,7 @@ namespace WindowsFormsApp1
             foreach (var items in item)
             {
                 string title = item[i].SelectSingleNode("title").InnerText;
-                string description = item[i].SelectSingleNode("description").InnerText;
+                string description = item[i].SelectSingleNode("description").InnerText;               
                 episodes.Add(new Episode(title, description));
                 i++;
             }

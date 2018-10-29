@@ -12,12 +12,15 @@ namespace WindowsFormsApp1
     class XmlReader
     {
         string MainFolder;
+
+        StringManipulator sm = new StringManipulator();
+
         public XmlReader()
         {
             MainFolder = new DirectoryCreator().CreateMainDirectory();
         }
 
-        public List<Podcast> LoadPodcastXml()
+        public List<Podcast> LoadPodcastsXml()
         {
             string[] files = Directory.GetFiles(MainFolder, "*", SearchOption.TopDirectoryOnly);
             List<Podcast> podcasts = new List<Podcast>();
@@ -35,7 +38,8 @@ namespace WindowsFormsApp1
                 {
                     string episodeDescription = items[i].SelectSingleNode("description").InnerText;
                     string episodeTitle = items[i].SelectSingleNode("title").InnerText;
-                    episodes.Add(new Episode(episodeTitle, episodeDescription));
+                    string episodeId = items[i].SelectSingleNode("ID").InnerText;
+                    episodes.Add(new Episode(episodeTitle, episodeDescription, int.Parse(episodeId)));
 
                     i++;
                 }
@@ -46,30 +50,30 @@ namespace WindowsFormsApp1
                 string podcastTitle = "";
                 string frequency = "";
                 string category = "";
+                string url = "";
 
                 foreach (var smth in title)
                 {
                     podcastTitle = title[x].SelectSingleNode("title").InnerText;
                     category = title[x].SelectSingleNode("category").InnerText;
                     frequency = title[x].SelectSingleNode("frequency").InnerText;
+                    url = title[x].SelectSingleNode("url").InnerText;
 
-                   x++;
+                    x++;
                 }
 
 
-                var pod = new Podcast(podcastTitle, frequency, category, episodes, episodes.Count());
+                var pod = new Podcast(url, podcastTitle, frequency, category, episodes, episodes.Count());
                 podcasts.Add(pod);
                 episodes.Clear();
             }
             return podcasts;
         }
 
-        public List<Episode> GetEpisodesByPodcastTitleXml(string title)
-        {
-            StringManipulator sm = new StringManipulator();
+        public XmlDocument LoadLocalXml(string title)
+        { 
             string titleNoSpecialChars = sm.RemoveSpecialChars(title);
             string[] files = Directory.GetFiles(MainFolder, "*", SearchOption.TopDirectoryOnly);
-            List<Episode> episodes = new List<Episode>();
             XmlDocument xDoc = new XmlDocument();
 
             var isFound = false;
@@ -81,24 +85,54 @@ namespace WindowsFormsApp1
                     xDoc.Load(files[i]);
                     isFound = true;
                 }
-             i++;
+                i++;
             }
+            return xDoc;
+        }
 
-            
-            
-
+        public List<Episode> GetEpisodesByPodcastTitleXml(string title)
+        {
+            XmlDocument xDoc = LoadLocalXml(title);
             XmlNodeList items = xDoc.SelectNodes("//item");
-
+            List<Episode> episodes = new List<Episode>();
+            
             int x = 0;
             foreach (var item in items)
-            {
+            {         
               string episodeTitle = items[x].SelectSingleNode("title").InnerText;
               string episodeDescription = items[x].SelectSingleNode("description").InnerText;
-               episodes.Add(new Episode(episodeTitle, episodeDescription));
-                x++;
-            }
+              string episodeId = items[x].SelectSingleNode("ID").InnerText;
+              episodes.Add(new Episode(episodeTitle, episodeDescription, int.Parse(episodeId)));
+              x++;
+            }            
 
             return episodes;
         }
+
+      public string GetXmlElementWithoutTags(string element)
+        {
+            
+               string xmlEscape = StringManipulator.EscapeXMLValue(element);
+                
+                string textWithoutTags = "";
+            
+                var startAsXml = "<root>" + xmlEscape + "</root>";
+                var doc = XElement.Parse(startAsXml);
+                
+
+                foreach (var node in doc.Nodes())
+                {
+                    if (node.NodeType == XmlNodeType.Text)
+                    {
+                        textWithoutTags += node.ToString().Trim();
+                    }
+                }
+            string xmlUnescape = StringManipulator.UnescapeXMLValue(textWithoutTags);
+            return xmlUnescape;
+            
+          
+            
+        }
+
     }
 }
