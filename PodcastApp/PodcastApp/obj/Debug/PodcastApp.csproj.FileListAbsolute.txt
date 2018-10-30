@@ -28,3 +28,13 @@ C:\Users\klara\Documents\GitHub\PodcastApp\PodcastApp\PodcastApp\obj\Debug\Podca
 C:\Users\klara\Documents\GitHub\PodcastApp\PodcastApp\PodcastApp\obj\Debug\PodcastApp.csproj.CoreCompileInputs.cache
 C:\Users\klara\Documents\GitHub\PodcastApp\PodcastApp\PodcastApp\obj\Debug\WindowsFormsApp1.exe
 C:\Users\klara\Documents\GitHub\PodcastApp\PodcastApp\PodcastApp\obj\Debug\WindowsFormsApp1.pdb
+C:\Users\JD\Documents\GitHub\PodcastApp\PodcastApp\PodcastApp\bin\Debug\WindowsFormsApp1.exe.config
+C:\Users\JD\Documents\GitHub\PodcastApp\PodcastApp\PodcastApp\bin\Debug\WindowsFormsApp1.exe
+C:\Users\JD\Documents\GitHub\PodcastApp\PodcastApp\PodcastApp\bin\Debug\WindowsFormsApp1.pdb
+C:\Users\JD\Documents\GitHub\PodcastApp\PodcastApp\PodcastApp\obj\Debug\PodcastApp.csprojAssemblyReference.cache
+C:\Users\JD\Documents\GitHub\PodcastApp\PodcastApp\PodcastApp\obj\Debug\WindowsFormsApp1.Form1.resources
+C:\Users\JD\Documents\GitHub\PodcastApp\PodcastApp\PodcastApp\obj\Debug\WindowsFormsApp1.Properties.Resources.resources
+C:\Users\JD\Documents\GitHub\PodcastApp\PodcastApp\PodcastApp\obj\Debug\PodcastApp.csproj.GenerateResource.cache
+C:\Users\JD\Documents\GitHub\PodcastApp\PodcastApp\PodcastApp\obj\Debug\PodcastApp.csproj.CoreCompileInputs.cache
+C:\Users\JD\Documents\GitHub\PodcastApp\PodcastApp\PodcastApp\obj\Debug\WindowsFormsApp1.exe
+C:\Users\JD\Documents\GitHub\PodcastApp\PodcastApp\PodcastApp\obj\Debug\WindowsFormsApp1.pdb

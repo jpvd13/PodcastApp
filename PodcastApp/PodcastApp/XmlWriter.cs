@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 
 namespace WindowsFormsApp1
 {
-    class XmlWriter
+    class XmlWriter : IPathfinder, IDirectoryCreator
     {
-        string path = new DirectoryCreator().CreateMainDirectory();
+        string LocalPath; 
+
         public XmlWriter()
         {
-
+            LocalPath = GetPath();
         }
 
         public void CreatePodcastXml(Podcast pod)
@@ -36,35 +33,55 @@ namespace WindowsFormsApp1
                     new XElement("description", pod.Episodes[i].Description)
                     ));
             }
+
             StringWriter sw = new StringWriter();
             xDoc.Save(sw);
+
             StringManipulator sm = new StringManipulator();
             string newPodTitle = sm.RemoveSpecialChars(pod.PodTitle);
-            xDoc.Save(path + @"\" + newPodTitle + ".xml");
+
+            xDoc.Save(LocalPath + @"\" + newPodTitle + ".xml");
         }
 
         public void CreateCategoriesXml()
         {
+            if (!File.Exists(LocalPath + @"\Categories\Categories.xml"))
+            {
+                XDocument xDoc = new XDocument(
+                            new XDeclaration("1.0", "UTF-16", null),
+                            new XElement("Categories",
+                                new XElement("Category", "Skräck")));
 
-            XDocument xDoc = new XDocument(
-                        new XDeclaration("1.0", "UTF-16", null),
-                        new XElement("channel",
-                            new XElement("title", "Categories")));
+                string categoryPath = LocalPath + @"\Categories\";
+                CreateDirectory(categoryPath);
 
-            Directory.CreateDirectory(path + @"\" + "Categories");
-            StringWriter sw = new StringWriter();
-            xDoc.Save(sw); 
-            xDoc.Save(path + @"\Categories" +@"\" + "Categories" + ".xml");
+                StringWriter sw = new StringWriter();
+                xDoc.Save(sw);
+                xDoc.Save(LocalPath + @"\Categories\Categories.xml");
+            }
         }
 
         public void WriteNewCategory(string name)
         {
-            XmlDocument xDoc = new XmlDocument();
-            xDoc.Load(path + @"\Categories" + @"\" + "Categories" + ".xml");
+            XDocument xDoc = XDocument.Load(LocalPath + @"\Categories\Categories.xml");
+            XElement category = xDoc.Element("Categories");
+            category.Add(new XElement("Category", name));
+            xDoc.Save(LocalPath + @"\Categories\Categories.xml");
 
-           // xDoc.Root.Add(new XElement("item",
-                 //   new XElement("Name", name)));
                                        
+        }
+
+        public string GetPath()
+        {
+            string xmlDirectory = Path.Combine(Environment.CurrentDirectory, @"PoddarXml\");
+            return xmlDirectory;
+           
+        }
+
+        public void CreateDirectory(string path)
+        {
+            string newDirectory = Path.Combine(Environment.CurrentDirectory, path);
+            Directory.CreateDirectory(newDirectory);
         }
     }
 }

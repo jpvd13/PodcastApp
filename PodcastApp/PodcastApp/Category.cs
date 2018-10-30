@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WindowsFormsApp1
+﻿namespace WindowsFormsApp1
 {
-    class Category
+    public class Category
     {
         public string Name;
         

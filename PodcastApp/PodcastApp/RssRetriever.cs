@@ -1,26 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
-using System.Xml.Linq;
+
 
 namespace WindowsFormsApp1
 {
 
-    class RssRetriever
+    class RssRetriever: IPathfinder, IDirectoryCreator
     {
-        readonly string MainFolder;
-        XmlDocument doc = new XmlDocument(); 
+        readonly string LocalPath;
+        XmlDocument doc = new XmlDocument();
         
+
+
         public RssRetriever(string url)
-        {  
-            MainFolder = new DirectoryCreator().CreateMainDirectory();
+        {
+            LocalPath = GetPath();
             Form1 form = new Form1();
-            doc.Load(url);
+
+
+            try { doc.Load(url); }
+            catch (ArgumentException e) { MessageBox.Show(e.Message, "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            catch (FileNotFoundException f) { MessageBox.Show(f.Message, "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            catch (XmlException) { MessageBox.Show("URL did not lead to a valid source", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            catch (System.Net.WebException) { MessageBox.Show("URL did not lead to a valid source", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
             SaveOriginalFeedXml();
         }
    
@@ -29,15 +34,25 @@ namespace WindowsFormsApp1
         // Saves original xml file to specified directory with same name as file
         public void SaveOriginalFeedXml()
         {
-            doc.PreserveWhitespace = true;
-            string mainTitle = GetPodcastTitleFromRss();
-            StringManipulator sm = new StringManipulator();
-            string titleNoSpecialLetter = sm.RemoveSpecialChars(mainTitle) + "Original";
+            try
+            {
+                doc.PreserveWhitespace = true;
 
-            Directory.CreateDirectory(MainFolder + @"\" + titleNoSpecialLetter);
+                string mainTitle = GetPodcastTitleFromRss();
+                if (mainTitle != "")
+                {
+                    StringManipulator sm = new StringManipulator();
+                    string titleNoSpecialLetter = sm.RemoveSpecialChars(mainTitle) + "Original";
 
-            string pathToSave = MainFolder + @"\" + titleNoSpecialLetter + @"\" + titleNoSpecialLetter;
-            doc.Save(pathToSave + ".xml");
+                    CreateDirectory(LocalPath + @"\" + titleNoSpecialLetter);
+                    string pathToSave = LocalPath + @"\" + titleNoSpecialLetter + @"\" + titleNoSpecialLetter;
+
+                    doc.Save(pathToSave + ".xml");
+                }
+            }
+            catch (XmlException) { }
+           
+            
         }
 
 
@@ -75,24 +90,17 @@ namespace WindowsFormsApp1
             return episodes;
         }
         
-        // Returns a list of descriptions in a specified podcast xml
-        public List<string> GetDescriptions() //Kanske kan snyggas till lite
+        public string GetPath()
         {
-            List<string> description = new List<string>();
-            XmlNodeList item = doc.SelectNodes("//item");
-
-
-            var i = 0;
-            foreach (var items in item)
-            {
-                description.Add(item[i].SelectSingleNode("description").InnerText);
-                i++;
-
-            }
-            return description;
+            string xmlDirectory = Path.Combine(Environment.CurrentDirectory, @"PoddarXml\");
+            return xmlDirectory;
         }
 
-      
+        public void CreateDirectory(string path)
+        {
+            string xmlDirectory = Path.Combine(Environment.CurrentDirectory, path);
+            Directory.CreateDirectory(xmlDirectory);            
+        }
     }
 }
 

@@ -2,28 +2,26 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 
 namespace WindowsFormsApp1
 {
-    class XmlReader
-    {
-        string MainFolder;
+    class XmlReader : IPathfinder
 
+    {
+        string LocalDirectory;
         StringManipulator sm = new StringManipulator();
 
         public XmlReader()
         {
-            MainFolder = new DirectoryCreator().CreateMainDirectory();
+            LocalDirectory = GetPath();
         }
 
         public List<Podcast> LoadPodcastsXml()
         {
-            string[] files = Directory.GetFiles(MainFolder, "*", SearchOption.TopDirectoryOnly);
-            List<Podcast> podcasts = new List<Podcast>();
+            string[] files = Directory.GetFiles(GetPath(), "*", SearchOption.TopDirectoryOnly);                                                 
+            List<Podcast> podcasts =new List<Podcast>();
             List<Episode> episodes = new List<Episode>();
 
             XmlDocument xDoc = new XmlDocument();
@@ -62,7 +60,6 @@ namespace WindowsFormsApp1
                     x++;
                 }
 
-
                 var pod = new Podcast(url, podcastTitle, frequency, category, episodes, episodes.Count());
                 podcasts.Add(pod);
                 episodes.Clear();
@@ -70,10 +67,10 @@ namespace WindowsFormsApp1
             return podcasts;
         }
 
-        public XmlDocument LoadLocalXml(string title)
+        public XmlDocument LoadLocalXmlFileByTitle(string title)
         { 
             string titleNoSpecialChars = sm.RemoveSpecialChars(title);
-            string[] files = Directory.GetFiles(MainFolder, "*", SearchOption.TopDirectoryOnly);
+            string[] files = Directory.GetFiles(GetPath(), "*", SearchOption.TopDirectoryOnly);
             XmlDocument xDoc = new XmlDocument();
 
             var isFound = false;
@@ -92,7 +89,7 @@ namespace WindowsFormsApp1
 
         public List<Episode> GetEpisodesByPodcastTitleXml(string title)
         {
-            XmlDocument xDoc = LoadLocalXml(title);
+            XmlDocument xDoc = LoadLocalXmlFileByTitle(title);
             XmlNodeList items = xDoc.SelectNodes("//item");
             List<Episode> episodes = new List<Episode>();
             
@@ -105,15 +102,12 @@ namespace WindowsFormsApp1
               episodes.Add(new Episode(episodeTitle, episodeDescription, int.Parse(episodeId)));
               x++;
             }            
-
             return episodes;
         }
 
       public string GetXmlElementWithoutTags(string element)
-        {
-            
-               string xmlEscape = StringManipulator.EscapeXMLValue(element);
-                
+        {          
+               string xmlEscape = StringManipulator.EscapeXMLValue(element);             
                 string textWithoutTags = "";
             
                 var startAsXml = "<root>" + xmlEscape + "</root>";
@@ -128,11 +122,37 @@ namespace WindowsFormsApp1
                     }
                 }
             string xmlUnescape = StringManipulator.UnescapeXMLValue(textWithoutTags);
-            return xmlUnescape;
-            
-          
-            
+            return xmlUnescape;                      
         }
 
+        public List<Category> GetCategories()
+        {
+            List<Category> categoriesList = new List<Category>();
+            if (File.Exists(GetPath() + @"\Categories\Categories.xml"))
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(GetPath() + @"\Categories\Categories.xml");
+                XmlNodeList categories = doc.SelectNodes("//Category");
+                
+                var i = 0;
+                if (categories.Count > 0)
+                {
+                    foreach (var cat in categories)
+                    {
+                        string category = categories[i].InnerText;
+                        categoriesList.Add(new Category(category));
+                        i++;
+                    }
+                }
+            }
+            return categoriesList;
+        }
+        
+        public string GetPath()
+        {
+            string xmlDirectory = Path.Combine(Environment.CurrentDirectory, @"PoddarXml\");
+            return xmlDirectory;
+
+        }
     }
 }
