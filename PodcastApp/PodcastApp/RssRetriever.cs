@@ -18,7 +18,7 @@ namespace WindowsFormsApp1
         public RssRetriever(string url)
         {
             LocalPath = GetPath();
-            Form1 form = new Form1();
+           
 
 
             try { doc.Load(url); }

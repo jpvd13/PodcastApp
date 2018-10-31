@@ -17,8 +17,8 @@ namespace WindowsFormsApp1
         public string InputTxtUrl { get; set; }
         public List<string> ListFeeds { get; set; }
         public string CurrentPodcast { get; set; }
-        public System.Timers.Timer theTimer;
-        private HttpClient Client = new HttpClient();
+        public System.Windows.Forms.Timer theTimer;
+
 
         XmlWriter xw;
         XmlReader xr;
@@ -27,30 +27,84 @@ namespace WindowsFormsApp1
         {
             InitializeComponent();
 
-            cbbCategories.DropDownStyle = ComboBoxStyle.DropDownList;
-            FillCategoryCbb();
-
+            cbbCategories.DropDownStyle = ComboBoxStyle.DropDownList;           
             cbbFrequency.DropDownStyle = ComboBoxStyle.DropDownList;
 
             xw = new XmlWriter();
-            xw.CreateCategoriesXml();
-
             xr = new XmlReader();
-            List<Podcast> pod = xr.LoadPodcastsXml();
-            foreach (var p in pod)
-            {
-                SetListFeed(p);
-            }
+            xw.CreateCategoriesXml();           
+
+            SetUpdateInterval();
+            PopulateCategoriesList();
+            PopulateFeedList();
+            FillCategoryCbb();
+
+        }
+
+        public void PopulateCategoriesList()
+        {
 
             List<Category> cat = xr.GetCategories();
             foreach (var c in cat)
             {
                 SetCategoriesList(c);
             }
+        }
+        public async Task FetchNewRss(Podcast pod)
+        {          
+            RssRetriever rr = new RssRetriever(pod.Url);
+            rr.SaveOriginalFeedXml();
+            var episodes = rr.GetEpisodes();
 
-           Task.Run(() => GetFrequenciesAndUrls());
+            Podcast pod2 = new Podcast(pod.Url, pod.PodTitle, pod.Frequency, pod.Category, episodes, episodes.Count());
+            XmlWriter xw = new XmlWriter();
+            xw.CreatePodcastXml(pod2);
+        }
+
+        private void Interval_Tick(object sender, EventArgs e, Podcast p)
+        {          
+                var t1 = FetchNewRss(p);
+               
+                var item = lvFeeds.FindItemWithText(p.PodTitle);
+                if(item != null)
+                {
+                    lvFeeds.Items[item.Index].Remove();
+                }
+                SetListFeed(p);         
+        }
+
+            private async Task SetUpdateInterval()
+            {
+            
+            List<Podcast> podz = xr.LoadPodcastsXml();
+            foreach (var p in podz)
+            {
+                await Task.Delay(1000);
+                string intFreq = p.Frequency.Replace(" min", "");
+                int.TryParse(intFreq, out int freq);
+                int freqToSeconds = freq * 1000;
+
+                theTimer = new System.Windows.Forms.Timer
+                {
+                    Interval = (freqToSeconds)
+                };
+                theTimer.Start();                
+                theTimer.Tick += (sender2, e2) => Interval_Tick(sender2, e2, p);
+
+            }
 
         }
+
+        private void PopulateFeedList()
+        {
+            xr = new XmlReader();
+            List<Podcast> pod = xr.LoadPodcastsXml();
+            foreach (var p in pod)
+            {
+                SetListFeed(p);
+            }
+        }
+      
 
         private void lwEpisodes_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -172,6 +226,8 @@ namespace WindowsFormsApp1
                     MessageBox.Show("Input is not a valid Url", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+
+            SetUpdateInterval();
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
@@ -204,64 +260,10 @@ namespace WindowsFormsApp1
             {
                 cbbCategories.Items.Add(c.Name);
             }
+            cbbCategories.SelectedIndex = 0;
         }
 
-        private async Task SetTimer(int freq, string url, string frequency, string category, string title)
-        {
-           
-            theTimer = new System.Timers.Timer(freq);
-            theTimer.Start();
-            theTimer.Elapsed += async (sender2, e2) =>  await UpdatePodList(sender2, e2, url, frequency, category, title);
-        }
-
-        private async Task UpdatePodList(object sender, EventArgs e, string url, string frequency, string category, string title)
-        {
-
-            MethodInvoker me = delegate
-            {
-                if (lvFeeds.Items.Count != 0)
-                {
-                    var item = lvFeeds.FindItemWithText(title);
-                    if (item != null)
-                    {
-                        lvFeeds.Items[item.Index].Remove();
-
-                        RssRetriever retriever = new RssRetriever(url);
-                        var episodes = retriever.GetEpisodes();
-
-                        Podcast pod = new Podcast(url, title, frequency, category, episodes, episodes.Count());
-                        SetListFeed(pod);
-                        xw.CreatePodcastXml(pod);
-                    }
-                }
-            };
-
-            if (InvokeRequired)
-            {
-                Invoke(me);
-            }
-
-        }
-
-        private async Task GetFrequenciesAndUrls()
-        {
-            
-            List<Podcast> podcasts = new List<Podcast>(xr.LoadPodcastsXml());
-            int freq;
-            foreach (var pod in podcasts)
-            {               
-
-                string url = pod.Url;
-                string frequency = pod.Frequency;
-                string category = pod.Category;
-                string title = pod.PodTitle;
-
-                string intFreq = frequency.Replace(" min", "");
-                int.TryParse(intFreq, out freq);
-                int freqToSeconds = freq * 1000;
-               await SetTimer(freqToSeconds, url, frequency, category, title);
-            }
-        }
+      
 
         public void CreateDirectory(string path)
         {

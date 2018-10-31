@@ -37,6 +37,7 @@
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lwCategories = new System.Windows.Forms.ListView();
+            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnAdd = new System.Windows.Forms.Button();
             this.cbbCategories = new System.Windows.Forms.ComboBox();
             this.cbbFrequency = new System.Windows.Forms.ComboBox();
@@ -53,7 +54,6 @@
             this.txtFeedUrl = new System.Windows.Forms.TextBox();
             this.lblTitleDesc = new System.Windows.Forms.Label();
             this.tbEpisodeDesc = new System.Windows.Forms.TextBox();
-            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // lvFeeds
@@ -132,6 +132,11 @@
             this.lwCategories.UseCompatibleStateImageBehavior = false;
             this.lwCategories.View = System.Windows.Forms.View.Details;
             this.lwCategories.SelectedIndexChanged += new System.EventHandler(this.lwCategories_SelectedIndexChanged);
+            // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Text = "Categories";
+            this.columnHeader7.Width = 229;
             // 
             // btnAdd
             // 
@@ -290,11 +295,6 @@
             this.tbEpisodeDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tbEpisodeDesc.Size = new System.Drawing.Size(237, 198);
             this.tbEpisodeDesc.TabIndex = 22;
-            // 
-            // columnHeader7
-            // 
-            this.columnHeader7.Text = "Categories";
-            this.columnHeader7.Width = 229;
             // 
             // Form1
             // 
