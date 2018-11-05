@@ -11,12 +11,8 @@ using System.Xml.Linq;
 namespace WindowsFormsApp1
 {
     public class PodcastHandler : IDirectoryCreator, IPathfinder
-    {
-        XmlReader xr = new XmlReader();
-        XmlWriter xw = new XmlWriter();
     {              
         readonly string LocalPath;
-
         XmlDocument doc = new XmlDocument();
 
         public PodcastHandler(string url)
@@ -97,7 +93,6 @@ namespace WindowsFormsApp1
         {
             List<Episode> episodes = new List<Episode>();
             XmlNodeList item = doc.SelectNodes("//item");
-
 
             var i = 0;
             foreach (var items in item)

@@ -48,15 +48,11 @@ namespace WindowsFormsApp1
             }
         }
         public async Task FetchNewRss(Podcast pod)
-        {          
         {
             
             PodcastHandler writer = new PodcastHandler(pod.Url);
             writer.SaveOriginalRssFeed();
             var episodes = pReader.GetEpisodesByTitle(pod.PodTitle);
-            Podcast pod2 = new Podcast(pod.Url, pod.PodTitle, pod.Frequency, pod.Category, episodes, episodes.Count());
-            XmlWriter xw = new XmlWriter();
-            xw.CreatePodcastXml(pod2);            
             Podcast newPod = new Podcast(pod.Url, pod.PodTitle, pod.Frequency, pod.Category, episodes, episodes.Count());
             writer.CreatePodcast(newPod);            
         }
@@ -88,12 +84,10 @@ namespace WindowsFormsApp1
                 int.TryParse(intFreq, out int freq);
                 int freqToSeconds = freq * 1000;
 
-                theTimer = new System.Windows.Forms.Timer
                 theTimer = new Timer
                 {
                     Interval = (freqToSeconds)
                 };
-                theTimer.Start();                
                 theTimer.Start();                    
                 theTimer.Tick += (sender2, e2) => Interval_Tick(sender2, e2, p);
 
@@ -127,7 +121,6 @@ namespace WindowsFormsApp1
 
                 List<Episode> selectedEpisode = query.ToList();
 
-                string descNoXmlTags = pReader.GetEpisodeDescriptionWithoutXmlTags(selectedEpisode[0].Description);
                 string descNoXmlTags = StringManipulator.RemoveXmlTags(selectedEpisode[0].Description);
 
                 tbEpisodeDesc.Clear();
