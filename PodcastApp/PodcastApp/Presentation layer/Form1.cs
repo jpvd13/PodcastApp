@@ -24,13 +24,13 @@ namespace WindowsFormsApp1
         {
             InitializeComponent();
 
-            cbbCategories.DropDownStyle = ComboBoxStyle.DropDownList;           
+            cbbCategories.DropDownStyle = ComboBoxStyle.DropDownList;
             cbbFrequency.DropDownStyle = ComboBoxStyle.DropDownList;
             lvFeeds.Sorting = SortOrder.Ascending;
 
-            categoryHandler.CreateCategoryStorage();     
+            categoryHandler.CreateCategoryStorage();
 
-            
+
             SetUpdateInterval();
             PopulateCategoriesList();
             PopulateFeedList();
@@ -49,37 +49,36 @@ namespace WindowsFormsApp1
         }
         public async Task FetchNewRss(Podcast pod)
         {
-            
+            await Task.Delay(1000);
             PodcastHandler writer = new PodcastHandler(pod.Url);
             writer.SaveOriginalRssFeed();
             var episodes = pReader.GetEpisodesByTitle(pod.PodTitle);
             Podcast newPod = new Podcast(pod.Url, pod.PodTitle, pod.Frequency, pod.Category, episodes, episodes.Count());
-            writer.CreatePodcast(newPod);            
+            writer.CreatePodcast(newPod);
         }
 
         private async Task Interval_Tick(object sender, EventArgs e, Podcast p)
         {
-                await FetchNewRss(p);
-               
-                var item = lvFeeds.FindItemWithText(p.PodTitle);
-                if(item != null)
-                {
-                    lvFeeds.Items[item.Index].Remove();
-                }
-                if (item != null)
-                {
+            await FetchNewRss(p);
+
+            var item = lvFeeds.FindItemWithText(p.PodTitle);
+            if (item != null)
+            {
+                lvFeeds.Items[item.Index].Remove();
+            }
+            if (item != null)
+            {
                 SetListFeed(p);
-                }
-                 
+            }
+
         }
 
-            private async Task SetUpdateInterval()
-            {
-
+        private async Task SetUpdateInterval()
+        {
+            await Task.Delay(1000);
             List<Podcast> podz = pReader.GetPodcasts();
             foreach (var p in podz)
             {
-                await Task.Delay(1000);
                 string intFreq = p.Frequency.Replace(" min", "");
                 int.TryParse(intFreq, out int freq);
                 int freqToSeconds = freq * 36000;
@@ -88,7 +87,7 @@ namespace WindowsFormsApp1
                 {
                     Interval = (freqToSeconds)
                 };
-                theTimer.Start();                    
+                theTimer.Start();
                 theTimer.Tick += (sender2, e2) => Interval_Tick(sender2, e2, p);
 
             }
@@ -103,7 +102,7 @@ namespace WindowsFormsApp1
                 SetListFeed(p);
             }
         }
-      
+
 
         private void lwEpisodes_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -141,7 +140,7 @@ namespace WindowsFormsApp1
             string selected = "FAsfaf";
             if (lvFeeds.SelectedItems.Count > 0)
             {
-                 selected = lvFeeds.SelectedItems[0].Text;
+                selected = lvFeeds.SelectedItems[0].Text;
             }
             return selected;
         }
@@ -175,7 +174,7 @@ namespace WindowsFormsApp1
 
             lwEpisodes.Items.Clear();
             lblTitleDesc.Text = "";
-            tbEpisodeDesc.Clear();                             
+            tbEpisodeDesc.Clear();
 
             if (lvFeeds.SelectedItems.Count > 0)
             {
@@ -197,13 +196,13 @@ namespace WindowsFormsApp1
                         cbbCategories.Text = pod.Category;
                         cbbFrequency.Text = pod.Frequency;
                     }
-            }
+                }
             }
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            
+
             bool validLength = false;
             bool validUrl = false;
 
@@ -231,7 +230,7 @@ namespace WindowsFormsApp1
                         Podcast pod = new Podcast(GetTextUrl(), podTitle, cbbFrequency.Text, cbbCategories.Text, episodes, episodes.Count());
 
                         SetListFeed(pod);
-                       
+
                         writer.CreatePodcast(pod);
                     }
                 }
@@ -243,7 +242,7 @@ namespace WindowsFormsApp1
                 if (!validLength)
                 {
                     MessageBox.Show("The Url must be between 5-2083 characters", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                   
+
                 }
                 if (validLength && !validUrl)
                 {
@@ -254,13 +253,13 @@ namespace WindowsFormsApp1
             SetUpdateInterval();
         }
 
-        
-        
+
+
         private void button3_Click(object sender, EventArgs e)
-        {            
+        {
             if (validator.ValidateLength(txtCategory.Text, 2, 25))
             {
-                
+
                 categoryHandler.CreateCategory(txtCategory.Text);
                 Category cat = new Category(txtCategory.Text);
                 SetCategoriesList(cat);
@@ -281,7 +280,7 @@ namespace WindowsFormsApp1
                 cbbCategories.Items.Add(c.Name);
             }
             cbbCategories.SelectedIndex = 0;
-        }     
+        }
 
         public void CreateDirectory(string path)
         {
@@ -373,7 +372,8 @@ namespace WindowsFormsApp1
                     }
                 }
             }
-            catch (ArgumentOutOfRangeException) {
+            catch (ArgumentOutOfRangeException)
+            {
                 MessageBox.Show("No category is selected", "No selection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             };
         }
