@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace WindowsFormsApp1
 {
-    class Validate : StringManipulator
+    public class Validate : StringManipulator
     {
         public Validate()
         {
@@ -18,15 +18,24 @@ namespace WindowsFormsApp1
         {
             bool validate = false;
 
-            if(input.Length >= minLength && input.Length<= maxLength)
+            if (input.Length >= minLength && input.Length <= maxLength)
             {
                 validate = true;
             }
             return validate;
-            
 
-        }      
-        
+
+        }
+        public bool ValidateUpdateCategory(string input)
+        {
+            bool validate = false;
+            if (ValidateLength(input, 3, 20))
+            {
+                validate = true;
+            }
+            return validate;
+        }
+
         public bool ValidateUrl(string url)
         {
             bool result = Uri.TryCreate(url, UriKind.Absolute, out Uri uriResult)
@@ -34,6 +43,8 @@ namespace WindowsFormsApp1
 
             return result;
         }
-
     }
+
+    
+   
 }

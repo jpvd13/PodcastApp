@@ -41,10 +41,10 @@
             this.btnAdd = new System.Windows.Forms.Button();
             this.cbbCategories = new System.Windows.Forms.ComboBox();
             this.cbbFrequency = new System.Windows.Forms.ComboBox();
-            this.btnDelete = new System.Windows.Forms.Button();
+            this.btnDeletePod = new System.Windows.Forms.Button();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.BtnDeleteCategory = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.txtCategory = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -171,14 +171,15 @@
             this.cbbFrequency.TabIndex = 6;
             this.cbbFrequency.Text = "60 min";
             // 
-            // btnDelete
+            // btnDeletePod
             // 
-            this.btnDelete.Location = new System.Drawing.Point(292, 232);
-            this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(75, 23);
-            this.btnDelete.TabIndex = 7;
-            this.btnDelete.Text = "Delete";
-            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDeletePod.Location = new System.Drawing.Point(292, 232);
+            this.btnDeletePod.Name = "btnDeletePod";
+            this.btnDeletePod.Size = new System.Drawing.Size(75, 23);
+            this.btnDeletePod.TabIndex = 7;
+            this.btnDeletePod.Text = "Delete";
+            this.btnDeletePod.UseVisualStyleBackColor = true;
+            this.btnDeletePod.Click += new System.EventHandler(this.btnDeletePod_Click_1);
             // 
             // btnUpdate
             // 
@@ -199,16 +200,18 @@
             this.button1.TabIndex = 11;
             this.button1.Text = "Update";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.BtnUpdateCategory);
             // 
-            // button2
+            // BtnDeleteCategory
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(577, 205);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 10;
-            this.button2.Text = "Delete";
-            this.button2.UseVisualStyleBackColor = true;
+            this.BtnDeleteCategory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnDeleteCategory.Location = new System.Drawing.Point(577, 205);
+            this.BtnDeleteCategory.Name = "BtnDeleteCategory";
+            this.BtnDeleteCategory.Size = new System.Drawing.Size(75, 23);
+            this.BtnDeleteCategory.TabIndex = 10;
+            this.BtnDeleteCategory.Text = "Delete";
+            this.BtnDeleteCategory.UseVisualStyleBackColor = true;
+            this.BtnDeleteCategory.Click += new System.EventHandler(this.BtnDeleteCategory_Click);
             // 
             // button3
             // 
@@ -310,10 +313,10 @@
             this.Controls.Add(this.lblTitleDesc);
             this.Controls.Add(this.txtCategory);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.BtnDeleteCategory);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.btnUpdate);
-            this.Controls.Add(this.btnDelete);
+            this.Controls.Add(this.btnDeletePod);
             this.Controls.Add(this.cbbFrequency);
             this.Controls.Add(this.cbbCategories);
             this.Controls.Add(this.btnAdd);
@@ -337,10 +340,10 @@
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.Button btnDeletePod;
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button BtnDeleteCategory;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.TextBox txtCategory;
         private System.Windows.Forms.Label label1;

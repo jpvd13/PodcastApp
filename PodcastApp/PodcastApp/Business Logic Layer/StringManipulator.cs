@@ -3,7 +3,7 @@ using System.Text;
 
 namespace WindowsFormsApp1
 {
-    class StringManipulator
+   public class StringManipulator
     {
         // Removes special characters from a string
         public string RemoveSpecialChars(string input)

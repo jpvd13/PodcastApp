@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -7,7 +8,8 @@ namespace WindowsFormsApp1
 {
     class XmlWriter : IPathfinder, IDirectoryCreator
     {
-        string LocalPath; 
+        string LocalPath;
+        
 
         public XmlWriter()
         {
@@ -60,15 +62,77 @@ namespace WindowsFormsApp1
                 xDoc.Save(LocalPath + @"\Categories\Categories.xml");
             }
         }
-
         public void WriteNewCategory(string name)
         {
+            int id = GetCategoryId();
             XDocument xDoc = XDocument.Load(LocalPath + @"\Categories\Categories.xml");
             XElement category = xDoc.Element("Categories");
-            category.Add(new XElement("Category", name));
-            xDoc.Save(LocalPath + @"\Categories\Categories.xml");
+            category.Add(new XElement("Category", name,
+                                new XAttribute("value", name),
+                                new XAttribute("id", id)));
 
-                                       
+            xDoc.Save(LocalPath + @"\Categories\Categories.xml");
+        }
+
+        public void SaveOriginalFeedXml(XmlDocument doc)
+        {
+            try
+            {
+                doc.PreserveWhitespace = true;
+
+                PodcastHandler podHandler = new PodcastHandler();
+                string mainTitle = podHandler.GetPodcastTitleFromRss(doc);
+                if (mainTitle != "")
+                {
+                    StringManipulator sm = new StringManipulator();
+                    string titleNoSpecialLetter = sm.RemoveSpecialChars(mainTitle) + "Original";
+
+                    CreateDirectory(LocalPath + @"\" + titleNoSpecialLetter);
+                    string pathToSave = LocalPath + @"\" + titleNoSpecialLetter + @"\" + titleNoSpecialLetter;
+
+                    doc.Save(pathToSave + ".xml");
+                }
+            }
+            catch (XmlException) { }
+
+        }
+
+        public int GetCategoryId()
+        {
+            XDocument doc = XDocument.Load(LocalPath + @"\Categories\Categories.xml");
+            var query = from node in doc.Descendants("Category")
+                        let attr = node.Attribute("id")
+                        where attr != null
+                        select node;
+
+            return query.Count();
+        }
+
+
+        public void DeleteCategory(string name)
+        {
+            XDocument doc = XDocument.Load(LocalPath + @"\Categories\Categories.xml");
+            var q = from node in doc.Descendants("Category")
+                    let attr = node.Attribute("value")
+                    where attr != null && attr.Value == name
+                    select node;
+            q.ToList().ForEach(x => x.Remove());
+            doc.Save(LocalPath + @"\Categories\Categories.xml");
+        }
+
+        public void UpdateCategory(string input, string category)
+        {
+            XDocument doc = XDocument.Load(LocalPath + @"\Categories\Categories.xml");
+
+            foreach (XElement element in doc.Element("Categories").Descendants())
+            {
+                if (category == element.Value)
+                {
+                    element.Attribute("value").Value = input;
+                    element.Value = input;
+                }
+            }
+            doc.Save(LocalPath + @"\Categories\Categories.xml");
         }
 
         public string GetPath()

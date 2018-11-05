@@ -26,7 +26,9 @@ namespace WindowsFormsApp1
             catch (FileNotFoundException f) { MessageBox.Show(f.Message, "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
             catch (XmlException) { MessageBox.Show("URL did not lead to a valid source", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
             catch (System.Net.WebException) { MessageBox.Show("URL did not lead to a valid source", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
-            SaveOriginalFeedXml();
+
+
+            SaveOriginalFeedXml(); // Varför kör vi denna här? Ba nyfiken lellz
         }
    
 

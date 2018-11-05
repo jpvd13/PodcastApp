@@ -1,0 +1,10 @@
+C:\Users\klara\Desktop\KT09_LK_ProductList\KT09_LK_ProductList\bin\Debug\KT09_LK_ProductList.exe.config
+C:\Users\klara\Desktop\KT09_LK_ProductList\KT09_LK_ProductList\bin\Debug\KT09_LK_ProductList.exe
+C:\Users\klara\Desktop\KT09_LK_ProductList\KT09_LK_ProductList\bin\Debug\KT09_LK_ProductList.pdb
+C:\Users\klara\Desktop\KT09_LK_ProductList\KT09_LK_ProductList\obj\Debug\KT09_LK_ProductList.csprojAssemblyReference.cache
+C:\Users\klara\Desktop\KT09_LK_ProductList\KT09_LK_ProductList\obj\Debug\KT09_LK_ProductList.Form1.resources
+C:\Users\klara\Desktop\KT09_LK_ProductList\KT09_LK_ProductList\obj\Debug\KT09_LK_ProductList.Properties.Resources.resources
+C:\Users\klara\Desktop\KT09_LK_ProductList\KT09_LK_ProductList\obj\Debug\KT09_LK_ProductList.csproj.GenerateResource.cache
+C:\Users\klara\Desktop\KT09_LK_ProductList\KT09_LK_ProductList\obj\Debug\KT09_LK_ProductList.csproj.CoreCompileInputs.cache
+C:\Users\klara\Desktop\KT09_LK_ProductList\KT09_LK_ProductList\obj\Debug\KT09_LK_ProductList.exe
+C:\Users\klara\Desktop\KT09_LK_ProductList\KT09_LK_ProductList\obj\Debug\KT09_LK_ProductList.pdb

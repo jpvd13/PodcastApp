@@ -152,7 +152,6 @@ namespace WindowsFormsApp1
         {
             string xmlDirectory = Path.Combine(Environment.CurrentDirectory, @"PoddarXml\");
             return xmlDirectory;
-
         }
     }
 }

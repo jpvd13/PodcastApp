@@ -3,25 +3,21 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Linq;
-using System.Timers;
 using System.IO;
 using System.Threading.Tasks;
-using System.Net.Http;
+
 
 namespace WindowsFormsApp1
 {
-    public partial class Form1 : Form, IDirectoryCreator
+    public partial class Form1 : Form, IDirectoryCreator, IPathfinder
     {
-        public string InputTxtUrl { get; set; }
-        public List<string> ListFeeds { get; set; }
-        public string CurrentPodcast { get; set; }
-        public System.Windows.Forms.Timer theTimer;
+        public string CurrentPodcast;
+        Timer theTimer;
 
+        public Validate validator = new Validate();
+        public CategoryHandler categoryHandler = new CategoryHandler();
+        public PodcastHandler pReader = new PodcastHandler();
 
-        XmlWriter xw;
-        XmlReader xr;
 
         public Form1()
         {
@@ -29,10 +25,9 @@ namespace WindowsFormsApp1
 
             cbbCategories.DropDownStyle = ComboBoxStyle.DropDownList;           
             cbbFrequency.DropDownStyle = ComboBoxStyle.DropDownList;
+            lvFeeds.Sorting = SortOrder.Ascending;
 
-            xw = new XmlWriter();
-            xr = new XmlReader();
-            xw.CreateCategoriesXml();           
+            categoryHandler.CreateCategoryStorage();     
 
             SetUpdateInterval();
             PopulateCategoriesList();
@@ -44,7 +39,7 @@ namespace WindowsFormsApp1
         public void PopulateCategoriesList()
         {
 
-            List<Category> cat = xr.GetCategories();
+            List<Category> cat = categoryHandler.GetCategories();
             foreach (var c in cat)
             {
                 SetCategoriesList(c);
@@ -52,31 +47,35 @@ namespace WindowsFormsApp1
         }
         public async Task FetchNewRss(Podcast pod)
         {          
-            RssRetriever rr = new RssRetriever(pod.Url);
-            rr.SaveOriginalFeedXml();
-            var episodes = rr.GetEpisodes();
-
+            
+            PodcastHandler writer = new PodcastHandler(pod.Url);
+            writer.SaveOriginalRssFeed();
+            var episodes = pReader.GetEpisodesByTitle(pod.PodTitle);
             Podcast pod2 = new Podcast(pod.Url, pod.PodTitle, pod.Frequency, pod.Category, episodes, episodes.Count());
             XmlWriter xw = new XmlWriter();
-            xw.CreatePodcastXml(pod2);
+            xw.CreatePodcastXml(pod2);            
         }
 
-        private void Interval_Tick(object sender, EventArgs e, Podcast p)
-        {          
-                var t1 = FetchNewRss(p);
+        private async Task Interval_Tick(object sender, EventArgs e, Podcast p)
+        {
+                await FetchNewRss(p);
                
                 var item = lvFeeds.FindItemWithText(p.PodTitle);
                 if(item != null)
                 {
                     lvFeeds.Items[item.Index].Remove();
                 }
-                SetListFeed(p);         
+                if (item != null)
+                {
+                SetListFeed(p);
+                }
+                 
         }
 
             private async Task SetUpdateInterval()
             {
-            
-            List<Podcast> podz = xr.LoadPodcastsXml();
+
+            List<Podcast> podz = pReader.GetPodcasts();
             foreach (var p in podz)
             {
                 await Task.Delay(1000);
@@ -97,8 +96,7 @@ namespace WindowsFormsApp1
 
         private void PopulateFeedList()
         {
-            xr = new XmlReader();
-            List<Podcast> pod = xr.LoadPodcastsXml();
+            List<Podcast> pod = pReader.GetPodcasts();
             foreach (var p in pod)
             {
                 SetListFeed(p);
@@ -113,7 +111,7 @@ namespace WindowsFormsApp1
                 string currentEpisode = lwEpisodes.SelectedItems[0].Text;
 
 
-                List<Episode> episodes = new List<Episode>(xr.GetEpisodesByPodcastTitleXml(CurrentPodcast));
+                List<Episode> episodes = new List<Episode>(pReader.GetEpisodesByTitle(CurrentPodcast));
 
                 var query = from ep in episodes
                             where ep.Title == currentEpisode
@@ -122,7 +120,7 @@ namespace WindowsFormsApp1
 
                 List<Episode> selectedEpisode = query.ToList();
 
-                string descNoXmlTags = xr.GetXmlElementWithoutTags(selectedEpisode[0].Description);
+                string descNoXmlTags = pReader.GetEpisodeDescriptionWithoutXmlTags(selectedEpisode[0].Description);
 
                 tbEpisodeDesc.Clear();
 
@@ -168,7 +166,7 @@ namespace WindowsFormsApp1
             if (lvFeeds.SelectedItems.Count > 0)
             {
                 CurrentPodcast = lvFeeds.SelectedItems[0].SubItems[0].Text;
-                List<Episode> episodes = new List<Episode>(xr.GetEpisodesByPodcastTitleXml(CurrentPodcast));
+                List<Episode> episodes = new List<Episode>(pReader.GetEpisodesByTitle(CurrentPodcast));
 
                 foreach (var episode in episodes)
                 {
@@ -181,15 +179,15 @@ namespace WindowsFormsApp1
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            var validate = new Validate();
+            
             bool validLength = false;
             bool validUrl = false;
 
-            if (validate.ValidateLength(getTextUrl(), 5, 2083))
+            if (validator.ValidateLength(getTextUrl(), 5, 2083))
             {
                 validLength = true;
             }
-            if (validate.ValidateUrl(getTextUrl()))
+            if (validator.ValidateUrl(getTextUrl()))
             {
                 validUrl = true;
             }
@@ -198,17 +196,19 @@ namespace WindowsFormsApp1
             {
                 CreateDirectory(@"PoddarXml\");
 
-                RssRetriever retriever = new RssRetriever(getTextUrl());
-                var episodes = retriever.GetEpisodes();
+                PodcastHandler writer = new PodcastHandler(getTextUrl());
+                var podTitle = writer.GetPodcastTitleFromRss();
+                var episodes = writer.GetEpisodesFromRss();
+
                 try
                 {
-                    if (retriever.GetPodcastTitleFromRss() != "")
+                    if (podTitle != "")
                     {
-                        Podcast pod = new Podcast(getTextUrl(), retriever.GetPodcastTitleFromRss(), cbbFrequency.Text, cbbCategories.Text, episodes, episodes.Count());
+                        Podcast pod = new Podcast(getTextUrl(), podTitle, cbbFrequency.Text, cbbCategories.Text, episodes, episodes.Count());
 
                         SetListFeed(pod);
-
-                        xw.CreatePodcastXml(pod);
+                       
+                        writer.CreatePodcast(pod);
                     }
                 }
                 catch (ArgumentException) { }
@@ -236,11 +236,11 @@ namespace WindowsFormsApp1
         }
 
         private void button3_Click(object sender, EventArgs e)
-        {
-            var validate = new Validate();
-            if (validate.ValidateLength(txtCategory.Text, 2, 25))
+        {            
+            if (validator.ValidateLength(txtCategory.Text, 2, 25))
             {
-                xw.WriteNewCategory(txtCategory.Text);
+                
+                categoryHandler.CreateCategory(txtCategory.Text);
                 Category cat = new Category(txtCategory.Text);
                 SetCategoriesList(cat);
                 FillCategoryCbb();
@@ -253,17 +253,14 @@ namespace WindowsFormsApp1
 
         private void FillCategoryCbb()
         {
-            XmlReader xr = new XmlReader();
-            List<Category> cat = xr.GetCategories();
+            List<Category> cat = categoryHandler.GetCategories();
             cbbCategories.Items.Clear();
             foreach (var c in cat)
             {
                 cbbCategories.Items.Add(c.Name);
             }
             cbbCategories.SelectedIndex = 0;
-        }
-
-      
+        }     
 
         public void CreateDirectory(string path)
         {
@@ -274,20 +271,15 @@ namespace WindowsFormsApp1
         private void lwCategories_SelectedIndexChanged(object sender, EventArgs e)
         {
             lvFeeds.Items.Clear();
-            List<Podcast> podlist = xr.LoadPodcastsXml();
+            List<Podcast> podlist = pReader.GetPodcasts();
             if (lwCategories.SelectedItems.Count == 1)
             {
                 string selectedCategory = lwCategories.SelectedItems[0].Text;
-
-
-
-
 
                 foreach (var pod in podlist)
                 {
                     if (pod.Category == selectedCategory)
                     {
-
                         string[] row = { pod.PodTitle, pod.Category, pod.NumberOfEpisodes.ToString(), pod.Frequency };
                         ListViewItem lvi = new ListViewItem(row);
                         lvFeeds.Items.Add(lvi);
@@ -301,6 +293,74 @@ namespace WindowsFormsApp1
                     SetListFeed(pod);
                 }
             }
+        }
+
+        public string GetPath()
+        {
+            string xmlDirectory = Path.Combine(Environment.CurrentDirectory, @"PoddarXml\");
+            return xmlDirectory;
+        }
+
+        private void BtnUpdateCategory(object sender, EventArgs e)
+        {
+            
+           
+                string selectedCategory = lwCategories.SelectedItems[0].Text;
+                string input = txtCategory.Text;
+                categoryHandler.UpdateCategory(input, selectedCategory);
+
+                lwCategories.Items.Clear();
+                PopulateCategoriesList();
+                FillCategoryCbb();
+
+                   }
+
+        private void BtnDeleteCategory_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                List<Category> categories = categoryHandler.GetCategories();
+
+                foreach (var cat in categories)
+                {
+                    if (lwCategories.Items.Count > 1)
+                    {
+                        if (lwCategories.SelectedItems[0].Text.Equals(cat.Name))
+                        {
+                            categoryHandler.DeleteCategory(cat.Name);
+
+                            var item = lwCategories.FindItemWithText(cat.Name);
+                            if (item != null)
+                            {
+                                lwCategories.Items[item.Index].Remove();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("There's always been a Baggins, living here under the Hill… in Bag End. And there always will be", "Can't remove that", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (ArgumentOutOfRangeException) { };
+        }
+
+        private void btnDeletePod_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                var selectedItem = lvFeeds.SelectedItems[0].Text;
+                pReader.DeletePodcast(selectedItem);
+
+                var item = lvFeeds.FindItemWithText(selectedItem);
+                if (item != null)
+                {
+                    lvFeeds.Items[item.Index].Remove(); //Clears categories list
+
+                }
+            }
+
+            catch (ArgumentOutOfRangeException) { MessageBox.Show("No podcast selected", "No selection", MessageBoxButtons.OK, MessageBoxIcon.Error); };
         }
     }
 }
