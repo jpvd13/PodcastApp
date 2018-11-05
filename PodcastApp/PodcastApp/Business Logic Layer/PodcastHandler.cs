@@ -11,7 +11,7 @@ using System.Xml.Linq;
 namespace WindowsFormsApp1
 {
     public class PodcastHandler : IDirectoryCreator, IPathfinder
-    {              
+    {
         readonly string LocalPath;
         XmlDocument doc = new XmlDocument();
 
@@ -32,122 +32,114 @@ namespace WindowsFormsApp1
 
         }
 
-<<<<<<< HEAD
         public List<Podcast> GetPodcasts()
         {
-=======
-        public List<Podcast> GetPodcasts() {
             XmlReader xr = new XmlReader();
->>>>>>> 3f70a386699582bf3e97c2167b51d4f5c0db9392
+
             return xr.LoadPodcastsXml();
         }
 
-<<<<<<< HEAD
-        public List<Episode> GetEpisodesByTitle(string title)
-        {
-            return xr.GetEpisodesByPodcastTitleXml(title);
-=======
-        public List<Episode> GetEpisodesByTitle(string title){
-            XmlReader xr = new XmlReader();
-            return xr.GetEpisodesByPodcastTitleXml(title);   
->>>>>>> 3f70a386699582bf3e97c2167b51d4f5c0db9392
-        }
-      
-        public void CreatePodcast(Podcast pod)
-        {
-            XmlWriter xw = new XmlWriter();
-            xw.CreatePodcastXml(pod);
-        }
-
-        public string GetPodcastTitleFromRss(XmlDocument xDoc)
-        {
-            XmlNodeList title = xDoc.SelectNodes("//channel");
-
-            var x = 0;
-            string podcastTitle = "";
-
-            foreach (var titles in title)
+            public List<Episode> GetEpisodesByTitle(string title)
             {
-                podcastTitle = (title[x].SelectSingleNode("title").InnerText);
+                XmlReader xr = new XmlReader();
+                return xr.GetEpisodesByPodcastTitleXml(title);
+
             }
 
-            return podcastTitle;
-        }
-
-        public string GetPodcastTitleFromRss()
-        {
-            XmlNodeList title = doc.SelectNodes("//channel");
-
-            var x = 0;
-            string podcastTitle = "";
-
-            foreach (var titles in title)
+            public void CreatePodcast(Podcast pod)
             {
-                podcastTitle = (title[x].SelectSingleNode("title").InnerText);
+                XmlWriter xw = new XmlWriter();
+                xw.CreatePodcastXml(pod);
             }
 
-            return podcastTitle;
-        }
-
-        public List<Episode> GetEpisodesFromRss()
-        {
-            List<Episode> episodes = new List<Episode>();
-            XmlNodeList item = doc.SelectNodes("//item");
-
-            var i = 0;
-            foreach (var items in item)
+            public string GetPodcastTitleFromRss(XmlDocument xDoc)
             {
-                string title = item[i].SelectSingleNode("title").InnerText;
-                string description = item[i].SelectSingleNode("description").InnerText;
-                episodes.Add(new Episode(title, description));
-                i++;
+                XmlNodeList title = xDoc.SelectNodes("//channel");
+
+                var x = 0;
+                string podcastTitle = "";
+
+                foreach (var titles in title)
+                {
+                    podcastTitle = (title[x].SelectSingleNode("title").InnerText);
+                }
+
+                return podcastTitle;
             }
-            return episodes;
-        }
 
-        public void SaveOriginalRssFeed()
-        {
-            XmlWriter xw = new XmlWriter();
-            xw.SaveOriginalFeedXml(doc);
-        }
-
-        public void DeletePodcast(string selectedPodcast)
-        {
-            var sm = new StringManipulator();
-
-            var fileName = GetPath() + sm.RemoveSpecialChars(selectedPodcast + ".xml");
-            string originalDirectory = fileName.Replace(".xml", "Original"); //Path to the directory in which the original XML file was saved
-
-            if ((File.Exists(fileName)))
+            public string GetPodcastTitleFromRss()
             {
-                File.Delete(fileName);
-                Directory.Delete(originalDirectory, true); //Deletes original XML directory and its content
+                XmlNodeList title = doc.SelectNodes("//channel");
 
+                var x = 0;
+                string podcastTitle = "";
+
+                foreach (var titles in title)
+                {
+                    podcastTitle = (title[x].SelectSingleNode("title").InnerText);
+                }
+
+                return podcastTitle;
             }
+
+            public List<Episode> GetEpisodesFromRss()
+            {
+                List<Episode> episodes = new List<Episode>();
+                XmlNodeList item = doc.SelectNodes("//item");
+
+                var i = 0;
+                foreach (var items in item)
+                {
+                    string title = item[i].SelectSingleNode("title").InnerText;
+                    string description = item[i].SelectSingleNode("description").InnerText;
+                    episodes.Add(new Episode(title, description));
+                    i++;
+                }
+                return episodes;
+            }
+
+            public void SaveOriginalRssFeed()
+            {
+                XmlWriter xw = new XmlWriter();
+                xw.SaveOriginalFeedXml(doc);
+            }
+
+            public void DeletePodcast(string selectedPodcast)
+            {
+                var sm = new StringManipulator();
+
+                var fileName = GetPath() + sm.RemoveSpecialChars(selectedPodcast + ".xml");
+                string originalDirectory = fileName.Replace(".xml", "Original"); //Path to the directory in which the original XML file was saved
+
+                if ((File.Exists(fileName)))
+                {
+                    File.Delete(fileName);
+                    Directory.Delete(originalDirectory, true); //Deletes original XML directory and its content
+
+                }
+            }
+
+            public void UpdatePodcast(string url, string category, string frequency, string title)
+            {
+                var xw = new XmlWriter();
+                Podcast newPod = new Podcast(url, title, frequency, category, GetEpisodesByTitle(title), GetEpisodesByTitle(title).Count);
+
+                xw.CreatePodcastXml(newPod);
+            }
+
+            public string GetPath()
+            {
+                string xmlDirectory = Path.Combine(Environment.CurrentDirectory, @"PoddarXml\");
+                return xmlDirectory;
+            }
+
+            public void CreateDirectory(string path)
+            {
+                string xmlDirectory = Path.Combine(Environment.CurrentDirectory, path);
+                Directory.CreateDirectory(xmlDirectory);
+            }
+
+
+
         }
-
-        
-
-        public void UpdatePodcast(string url, string category, string frequency, string title)
-        {
-            var xw = new XmlWriter();
-            Podcast newPod = new Podcast(url, title, frequency, category, GetEpisodesByTitle(title), GetEpisodesByTitle(title).Count);
-
-            xw.CreatePodcastXml(newPod);
-        }
-
-        public string GetPath()
-        {
-            string xmlDirectory = Path.Combine(Environment.CurrentDirectory, @"PoddarXml\");
-            return xmlDirectory;
-        }
-
-        public void CreateDirectory(string path)
-        {
-            string xmlDirectory = Path.Combine(Environment.CurrentDirectory, path);
-            Directory.CreateDirectory(xmlDirectory);
-        }
-
-
     }
-}

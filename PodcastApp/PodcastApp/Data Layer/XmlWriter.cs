@@ -52,16 +52,10 @@ namespace WindowsFormsApp1
                 XDocument xDoc = new XDocument(
                             new XDeclaration("1.0", "UTF-16", null),
                             new XElement("Categories",
-<<<<<<< HEAD
                                 new XElement("Category", "Övrigt",
                                 new XAttribute("id", 0),
                                 new XAttribute("value", "Övrigt"))));
-=======
-                                new XElement("Category", "Skräck",
-                                new XAttribute("value", "Skräck"),
-                                new XAttribute("id", 0))));
 
->>>>>>> 3f70a386699582bf3e97c2167b51d4f5c0db9392
 
                 string categoryPath = LocalPath + @"\Categories\";
                 CreateDirectory(categoryPath);

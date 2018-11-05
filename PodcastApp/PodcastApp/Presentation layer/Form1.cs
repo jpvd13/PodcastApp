@@ -82,7 +82,7 @@ namespace WindowsFormsApp1
                 await Task.Delay(1000);
                 string intFreq = p.Frequency.Replace(" min", "");
                 int.TryParse(intFreq, out int freq);
-                int freqToSeconds = freq * 1000;
+                int freqToSeconds = freq * 36000;
 
                 theTimer = new Timer
                 {
@@ -134,16 +134,6 @@ namespace WindowsFormsApp1
         public string GetTextUrl()
         {
             return txtFeedUrl.Text;
-        }
-
-        public string GetCategoryFromCbb()
-        {
-            return cbbCategories.Text;
-        }
-
-        public string GetFrequencyFromCbb()
-        {
-            return cbbFrequency.Text;
         }
 
         public string GetSelectedItemListFeeds()
@@ -264,24 +254,8 @@ namespace WindowsFormsApp1
             SetUpdateInterval();
         }
 
-<<<<<<< HEAD
-        private void btnUpdate_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var ph = new PodcastHandler();
-                ph.UpdatePodcast(txtFeedUrl.Text, cbbCategories.Text, cbbFrequency.Text, lvFeeds.SelectedItems[0].Text);
-
-                lvFeeds.Items.Clear();
-                PopulateFeedList();
-            } catch(ArgumentException exc)
-            {
-                MessageBox.Show("No podcast is selected", "No selection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-=======
->>>>>>> 3f70a386699582bf3e97c2167b51d4f5c0db9392
+        
+        
         private void button3_Click(object sender, EventArgs e)
         {            
             if (validator.ValidateLength(txtCategory.Text, 2, 25))
@@ -350,28 +324,27 @@ namespace WindowsFormsApp1
 
         private void BtnUpdateCategory(object sender, EventArgs e)
         {
-<<<<<<< HEAD
-            try
-=======
-            if (lwCategories.SelectedItems.Count > 0)
->>>>>>> 3f70a386699582bf3e97c2167b51d4f5c0db9392
-            {
-                string selectedCategory = lwCategories.SelectedItems[0].Text;
-                string input = txtCategory.Text;
-                categoryHandler.UpdateCategory(input, selectedCategory);
 
-                lwCategories.Items.Clear();
-                PopulateCategoriesList();
-                FillCategoryCbb();
+            try
+            {
+
+                if (lwCategories.SelectedItems.Count > 0)
+                {
+                    string selectedCategory = lwCategories.SelectedItems[0].Text;
+                    string input = txtCategory.Text;
+                    categoryHandler.UpdateCategory(input, selectedCategory);
+
+                    lwCategories.Items.Clear();
+                    PopulateCategoriesList();
+                    FillCategoryCbb();
+                }
             }
-<<<<<<< HEAD
-            catch (ArgumentException exc) {
+
+            catch (ArgumentException exc)
+            {
                 MessageBox.Show("No category is selected", "No selection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        } 
-=======
         }
->>>>>>> 3f70a386699582bf3e97c2167b51d4f5c0db9392
 
         private void BtnDeleteCategory_Click(object sender, EventArgs e)
         {
@@ -421,6 +394,22 @@ namespace WindowsFormsApp1
             }
 
             catch (ArgumentOutOfRangeException) { MessageBox.Show("No podcast selected", "No selection", MessageBoxButtons.OK, MessageBoxIcon.Error); };
+        }
+
+        private void btnUpdate_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                var ph = new PodcastHandler();
+                ph.UpdatePodcast(txtFeedUrl.Text, cbbCategories.Text, cbbFrequency.Text, lvFeeds.SelectedItems[0].Text);
+
+                lvFeeds.Items.Clear();
+                PopulateFeedList();
+            }
+            catch (ArgumentException exc)
+            {
+                MessageBox.Show("No podcast is selected", "No selection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
