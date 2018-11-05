@@ -19,9 +19,7 @@ namespace WindowsFormsApp1
             Category = category;
             Episodes = episodes;
             NumberOfEpisodes = numberOfEpisodes;
-        }
-
-        
+        }   
 
     }
     

@@ -31,14 +31,17 @@ namespace WindowsFormsApp1
         public PodcastHandler()
         {
             LocalPath = GetPath();
+
         }
 
-        public List<Podcast> GetPodcasts() {
+        public List<Podcast> GetPodcasts()
+        {
             return xr.LoadPodcastsXml();
-          }
+        }
 
-        public List<Episode> GetEpisodesByTitle(string title){
-            return xr.GetEpisodesByPodcastTitleXml(title);   
+        public List<Episode> GetEpisodesByTitle(string title)
+        {
+            return xr.GetEpisodesByPodcastTitleXml(title);
         }
 
         public string GetEpisodeDescriptionWithoutXmlTags(string desc)
@@ -116,9 +119,19 @@ namespace WindowsFormsApp1
                 Directory.Delete(originalDirectory, true); //Deletes original XML directory and its content
 
             }
-
         }
-            public string GetPath()
+
+        
+
+        public void UpdatePodcast(string url, string category, string frequency, string title)
+        {
+            var xw = new XmlWriter();
+            Podcast newPod = new Podcast(url, title, frequency, category, GetEpisodesByTitle(title), GetEpisodesByTitle(title).Count);
+
+            xw.CreatePodcastXml(newPod);
+        }
+
+        public string GetPath()
         {
             string xmlDirectory = Path.Combine(Environment.CurrentDirectory, @"PoddarXml\");
             return xmlDirectory;

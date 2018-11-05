@@ -52,7 +52,9 @@ namespace WindowsFormsApp1
                 XDocument xDoc = new XDocument(
                             new XDeclaration("1.0", "UTF-16", null),
                             new XElement("Categories",
-                                new XElement("Category", "Skräck")));
+                                new XElement("Category", "Övrigt",
+                                new XAttribute("id", 0),
+                                new XAttribute("value", "Övrigt"))));
 
                 string categoryPath = LocalPath + @"\Categories\";
                 CreateDirectory(categoryPath);
@@ -134,7 +136,7 @@ namespace WindowsFormsApp1
             }
             doc.Save(LocalPath + @"\Categories\Categories.xml");
         }
-
+       
         public string GetPath()
         {
             string xmlDirectory = Path.Combine(Environment.CurrentDirectory, @"PoddarXml\");

@@ -130,9 +130,29 @@ namespace WindowsFormsApp1
             }
         }
 
-        public string getTextUrl()
+        public string GetTextUrl()
         {
             return txtFeedUrl.Text;
+        }
+
+        public string GetCategoryFromCbb()
+        {
+            return cbbCategories.Text;
+        }
+
+        public string GetFrequencyFromCbb()
+        {
+            return cbbFrequency.Text;
+        }
+
+        public string GetSelectedItemListFeeds()
+        {
+            string selected = "FAsfaf";
+            if (lvFeeds.SelectedItems.Count > 0)
+            {
+                 selected = lvFeeds.SelectedItems[0].Text;
+            }
+            return selected;
         }
 
         public void SetListFeed(Podcast pod)
@@ -159,9 +179,12 @@ namespace WindowsFormsApp1
 
         private void lvFeeds_SelectedIndexChanged(object sender, EventArgs e)
         {
+            var ph = new PodcastHandler();
+            List<Podcast> podcasts = ph.GetPodcasts();
+
             lwEpisodes.Items.Clear();
             lblTitleDesc.Text = "";
-            tbEpisodeDesc.Clear();
+            tbEpisodeDesc.Clear();                             
 
             if (lvFeeds.SelectedItems.Count > 0)
             {
@@ -174,6 +197,16 @@ namespace WindowsFormsApp1
                     ListViewItem list = new ListViewItem(row);
                     lwEpisodes.Items.Add(list);
                 }
+
+                foreach (var pod in podcasts)
+                {
+                    if (pod.PodTitle == CurrentPodcast)
+                    {
+                        txtFeedUrl.Text = pod.Url;
+                        cbbCategories.Text = pod.Category;
+                        cbbFrequency.Text = pod.Frequency;
+                    }
+            }
             }
         }
 
@@ -183,11 +216,11 @@ namespace WindowsFormsApp1
             bool validLength = false;
             bool validUrl = false;
 
-            if (validator.ValidateLength(getTextUrl(), 5, 2083))
+            if (validator.ValidateLength(GetTextUrl(), 5, 2083))
             {
                 validLength = true;
             }
-            if (validator.ValidateUrl(getTextUrl()))
+            if (validator.ValidateUrl(GetTextUrl()))
             {
                 validUrl = true;
             }
@@ -196,7 +229,7 @@ namespace WindowsFormsApp1
             {
                 CreateDirectory(@"PoddarXml\");
 
-                PodcastHandler writer = new PodcastHandler(getTextUrl());
+                PodcastHandler writer = new PodcastHandler(GetTextUrl());
                 var podTitle = writer.GetPodcastTitleFromRss();
                 var episodes = writer.GetEpisodesFromRss();
 
@@ -204,7 +237,7 @@ namespace WindowsFormsApp1
                 {
                     if (podTitle != "")
                     {
-                        Podcast pod = new Podcast(getTextUrl(), podTitle, cbbFrequency.Text, cbbCategories.Text, episodes, episodes.Count());
+                        Podcast pod = new Podcast(GetTextUrl(), podTitle, cbbFrequency.Text, cbbCategories.Text, episodes, episodes.Count());
 
                         SetListFeed(pod);
                        
@@ -232,7 +265,17 @@ namespace WindowsFormsApp1
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
+            try
+            {
+                var ph = new PodcastHandler();
+                ph.UpdatePodcast(txtFeedUrl.Text, cbbCategories.Text, cbbFrequency.Text, lvFeeds.SelectedItems[0].Text);
 
+                lvFeeds.Items.Clear();
+                PopulateFeedList();
+            } catch(ArgumentException exc)
+            {
+                MessageBox.Show("No podcast is selected", "No selection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -303,8 +346,8 @@ namespace WindowsFormsApp1
 
         private void BtnUpdateCategory(object sender, EventArgs e)
         {
-            
-           
+            try
+            {
                 string selectedCategory = lwCategories.SelectedItems[0].Text;
                 string input = txtCategory.Text;
                 categoryHandler.UpdateCategory(input, selectedCategory);
@@ -312,8 +355,11 @@ namespace WindowsFormsApp1
                 lwCategories.Items.Clear();
                 PopulateCategoriesList();
                 FillCategoryCbb();
-
-                   }
+            }
+            catch (ArgumentException exc) {
+                MessageBox.Show("No category is selected", "No selection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        } 
 
         private void BtnDeleteCategory_Click(object sender, EventArgs e)
         {
@@ -338,11 +384,13 @@ namespace WindowsFormsApp1
                     }
                     else
                     {
-                        MessageBox.Show("There's always been a Baggins, living here under the Hill… in Bag End. And there always will be", "Can't remove that", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("There must always be at least on category available", "Can't remove that", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
-            catch (ArgumentOutOfRangeException) { };
+            catch (ArgumentOutOfRangeException) {
+                MessageBox.Show("No category is selected", "No selection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            };
         }
 
         private void btnDeletePod_Click_1(object sender, EventArgs e)
