@@ -3,46 +3,46 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace WindowsFormsApp1
 {
-    public class CategoryHandler
-    {
-         XmlWriter xw = new XmlWriter();
-         XmlReader xr = new XmlReader();
-
-        public  void CreateCategory(string name)
+    public class CategoryHandler : XmlWriter
+    {        
+        public List<Category> GetCategories()
         {
-            xw.WriteNewCategory(name);
-        }
-
-        public  List<Category> GetCategories()
-        {
+            XmlReader xr = new XmlReader();
             return xr.GetCategories();
-        }
-
-        public  void CreateCategoryStorage()
-        {
-            xw.CreateCategoriesXml();
         }
 
         public int GetCategoeryId()
         {
-            return xw.GetCategoryId();
+            XmlReader xr = new XmlReader();
+            return xr.GetCategoryId();
         }
+     
 
-        public void DeleteCategory(string name)
-        {
-            xw.DeleteCategory(name);
-        }
-
-        public void UpdateCategory(string input, string category)
+        public override void UpdateCategory(string input, string category)
         {
             Validate val = new Validate();
-            if (val.ValidateUpdateCategory(input)){                
-            xw.UpdateCategory(input, category);
+            if (val.ValidateUpdateCategory(input))
+            {
 
-                //ELse felmeddelande
-        }}
+                XDocument doc = XDocument.Load(GetPath() + @"\Categories\Categories.xml");
+
+                foreach (XElement element in doc.Element("Categories").Descendants())
+                {
+                    if (category == element.Value)
+                    {
+                        element.Attribute("value").Value = input;
+                        element.Value = input;
+                    }
+                }
+                doc.Save(GetPath() + @"\Categories\Categories.xml");
+            } else {
+                MessageBox.Show("Invalid input", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

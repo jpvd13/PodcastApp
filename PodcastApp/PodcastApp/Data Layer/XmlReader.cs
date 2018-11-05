@@ -105,25 +105,6 @@ namespace WindowsFormsApp1
             return episodes;
         }
 
-      public string GetXmlElementWithoutTags(string element)
-        {          
-               string xmlEscape = StringManipulator.EscapeXMLValue(element);             
-                string textWithoutTags = "";
-            
-                var startAsXml = "<root>" + xmlEscape + "</root>";
-                var doc = XElement.Parse(startAsXml);
-                
-
-                foreach (var node in doc.Nodes())
-                {
-                    if (node.NodeType == XmlNodeType.Text)
-                    {
-                        textWithoutTags += node.ToString().Trim();
-                    }
-                }
-            string xmlUnescape = StringManipulator.UnescapeXMLValue(textWithoutTags);
-            return xmlUnescape;                      
-        }
 
         public List<Category> GetCategories()
         {
@@ -147,7 +128,18 @@ namespace WindowsFormsApp1
             }
             return categoriesList;
         }
-        
+
+        public int GetCategoryId()
+        {
+            XDocument doc = XDocument.Load(GetPath() + @"\Categories\Categories.xml");
+            var query = from node in doc.Descendants("Category")
+                        let attr = node.Attribute("id")
+                        where attr != null
+                        select node;
+
+            return query.Count();
+        }
+
         public string GetPath()
         {
             string xmlDirectory = Path.Combine(Environment.CurrentDirectory, @"PoddarXml\");

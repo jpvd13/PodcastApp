@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace WindowsFormsApp1
 {
+    delegate void Del(Podcast pod);
     public partial class Form1 : Form, IDirectoryCreator, IPathfinder
     {
         public string CurrentPodcast;
@@ -29,6 +30,7 @@ namespace WindowsFormsApp1
 
             categoryHandler.CreateCategoryStorage();     
 
+            
             SetUpdateInterval();
             PopulateCategoriesList();
             PopulateFeedList();
@@ -46,14 +48,13 @@ namespace WindowsFormsApp1
             }
         }
         public async Task FetchNewRss(Podcast pod)
-        {          
+        {
             
             PodcastHandler writer = new PodcastHandler(pod.Url);
             writer.SaveOriginalRssFeed();
             var episodes = pReader.GetEpisodesByTitle(pod.PodTitle);
-            Podcast pod2 = new Podcast(pod.Url, pod.PodTitle, pod.Frequency, pod.Category, episodes, episodes.Count());
-            XmlWriter xw = new XmlWriter();
-            xw.CreatePodcastXml(pod2);            
+            Podcast newPod = new Podcast(pod.Url, pod.PodTitle, pod.Frequency, pod.Category, episodes, episodes.Count());
+            writer.CreatePodcast(newPod);            
         }
 
         private async Task Interval_Tick(object sender, EventArgs e, Podcast p)
@@ -83,11 +84,11 @@ namespace WindowsFormsApp1
                 int.TryParse(intFreq, out int freq);
                 int freqToSeconds = freq * 1000;
 
-                theTimer = new System.Windows.Forms.Timer
+                theTimer = new Timer
                 {
                     Interval = (freqToSeconds)
                 };
-                theTimer.Start();                
+                theTimer.Start();                    
                 theTimer.Tick += (sender2, e2) => Interval_Tick(sender2, e2, p);
 
             }
@@ -120,7 +121,7 @@ namespace WindowsFormsApp1
 
                 List<Episode> selectedEpisode = query.ToList();
 
-                string descNoXmlTags = pReader.GetEpisodeDescriptionWithoutXmlTags(selectedEpisode[0].Description);
+                string descNoXmlTags = StringManipulator.RemoveXmlTags(selectedEpisode[0].Description);
 
                 tbEpisodeDesc.Clear();
 
@@ -230,11 +231,6 @@ namespace WindowsFormsApp1
             SetUpdateInterval();
         }
 
-        private void btnUpdate_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void button3_Click(object sender, EventArgs e)
         {            
             if (validator.ValidateLength(txtCategory.Text, 2, 25))
@@ -303,8 +299,8 @@ namespace WindowsFormsApp1
 
         private void BtnUpdateCategory(object sender, EventArgs e)
         {
-            
-           
+            if (lwCategories.SelectedItems.Count > 0)
+            {
                 string selectedCategory = lwCategories.SelectedItems[0].Text;
                 string input = txtCategory.Text;
                 categoryHandler.UpdateCategory(input, selectedCategory);
@@ -312,8 +308,8 @@ namespace WindowsFormsApp1
                 lwCategories.Items.Clear();
                 PopulateCategoriesList();
                 FillCategoryCbb();
-
-                   }
+            }
+        }
 
         private void BtnDeleteCategory_Click(object sender, EventArgs e)
         {

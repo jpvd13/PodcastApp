@@ -6,15 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace WindowsFormsApp1
 {
     public class PodcastHandler : IDirectoryCreator, IPathfinder
-    {
-        XmlReader xr = new XmlReader();
-        XmlWriter xw = new XmlWriter();
+    {              
         readonly string LocalPath;
-
         XmlDocument doc = new XmlDocument();
 
         public PodcastHandler(string url)
@@ -34,20 +32,18 @@ namespace WindowsFormsApp1
         }
 
         public List<Podcast> GetPodcasts() {
+            XmlReader xr = new XmlReader();
             return xr.LoadPodcastsXml();
           }
 
         public List<Episode> GetEpisodesByTitle(string title){
+            XmlReader xr = new XmlReader();
             return xr.GetEpisodesByPodcastTitleXml(title);   
         }
-
-        public string GetEpisodeDescriptionWithoutXmlTags(string desc)
-        {
-            return xr.GetXmlElementWithoutTags(desc);
-        }
-
+      
         public void CreatePodcast(Podcast pod)
         {
+            XmlWriter xw = new XmlWriter();
             xw.CreatePodcastXml(pod);
         }
 
@@ -86,7 +82,6 @@ namespace WindowsFormsApp1
             List<Episode> episodes = new List<Episode>();
             XmlNodeList item = doc.SelectNodes("//item");
 
-
             var i = 0;
             foreach (var items in item)
             {
@@ -100,6 +95,7 @@ namespace WindowsFormsApp1
 
         public void SaveOriginalRssFeed()
         {
+            XmlWriter xw = new XmlWriter();
             xw.SaveOriginalFeedXml(doc);
         }
 
@@ -129,5 +125,7 @@ namespace WindowsFormsApp1
             string xmlDirectory = Path.Combine(Environment.CurrentDirectory, path);
             Directory.CreateDirectory(xmlDirectory);
         }
+
+
     }
 }

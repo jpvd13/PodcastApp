@@ -124,6 +124,7 @@
             this.lwCategories.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader7});
             this.lwCategories.GridLines = true;
+            this.lwCategories.HideSelection = false;
             this.lwCategories.Location = new System.Drawing.Point(415, 28);
             this.lwCategories.MultiSelect = false;
             this.lwCategories.Name = "lwCategories";
@@ -189,7 +190,6 @@
             this.btnUpdate.TabIndex = 8;
             this.btnUpdate.Text = "Update";
             this.btnUpdate.UseVisualStyleBackColor = true;
-            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
             // button1
             // 
