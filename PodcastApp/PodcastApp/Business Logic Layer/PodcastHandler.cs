@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace WindowsFormsApp1
 {
@@ -13,6 +14,7 @@ namespace WindowsFormsApp1
     {
         XmlReader xr = new XmlReader();
         XmlWriter xw = new XmlWriter();
+    {              
         readonly string LocalPath;
 
         XmlDocument doc = new XmlDocument();
@@ -34,23 +36,30 @@ namespace WindowsFormsApp1
 
         }
 
+<<<<<<< HEAD
         public List<Podcast> GetPodcasts()
         {
+=======
+        public List<Podcast> GetPodcasts() {
+            XmlReader xr = new XmlReader();
+>>>>>>> 3f70a386699582bf3e97c2167b51d4f5c0db9392
             return xr.LoadPodcastsXml();
         }
 
+<<<<<<< HEAD
         public List<Episode> GetEpisodesByTitle(string title)
         {
             return xr.GetEpisodesByPodcastTitleXml(title);
+=======
+        public List<Episode> GetEpisodesByTitle(string title){
+            XmlReader xr = new XmlReader();
+            return xr.GetEpisodesByPodcastTitleXml(title);   
+>>>>>>> 3f70a386699582bf3e97c2167b51d4f5c0db9392
         }
-
-        public string GetEpisodeDescriptionWithoutXmlTags(string desc)
-        {
-            return xr.GetXmlElementWithoutTags(desc);
-        }
-
+      
         public void CreatePodcast(Podcast pod)
         {
+            XmlWriter xw = new XmlWriter();
             xw.CreatePodcastXml(pod);
         }
 
@@ -103,6 +112,7 @@ namespace WindowsFormsApp1
 
         public void SaveOriginalRssFeed()
         {
+            XmlWriter xw = new XmlWriter();
             xw.SaveOriginalFeedXml(doc);
         }
 
@@ -142,5 +152,7 @@ namespace WindowsFormsApp1
             string xmlDirectory = Path.Combine(Environment.CurrentDirectory, path);
             Directory.CreateDirectory(xmlDirectory);
         }
+
+
     }
 }

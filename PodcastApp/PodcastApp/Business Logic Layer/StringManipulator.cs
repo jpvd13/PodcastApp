@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Text;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace WindowsFormsApp1
 {
@@ -34,6 +36,25 @@ namespace WindowsFormsApp1
                 throw new ArgumentNullException("xmlString");
 
             return xmlString.Replace("&amp;", "&");
+        }
+
+        public static string RemoveXmlTags(string input)
+        {
+
+            string xmlEscape = EscapeXMLValue(input);
+            string textWithoutTags = "";
+
+            var startAsXml = "<root>" + xmlEscape + "</root>";
+            var doc = XElement.Parse(startAsXml);
+
+            foreach (var node in doc.Nodes())
+            {
+                if (node.NodeType == XmlNodeType.Text)
+                {
+                    textWithoutTags += node.ToString().Trim();
+                }
+            }
+            return UnescapeXMLValue(textWithoutTags);
         }
     } 
 }

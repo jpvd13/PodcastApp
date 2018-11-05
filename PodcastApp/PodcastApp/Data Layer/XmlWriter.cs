@@ -7,6 +7,7 @@ using System.Xml.Linq;
 namespace WindowsFormsApp1
 {
     class XmlWriter : IPathfinder, IDirectoryCreator
+     public class XmlWriter : IPathfinder, IDirectoryCreator
     {
         string LocalPath;
         
@@ -46,15 +47,23 @@ namespace WindowsFormsApp1
         }
 
         public void CreateCategoriesXml()
+        public void CreateCategoryStorage()
         {
             if (!File.Exists(LocalPath + @"\Categories\Categories.xml"))
             {
                 XDocument xDoc = new XDocument(
                             new XDeclaration("1.0", "UTF-16", null),
                             new XElement("Categories",
+<<<<<<< HEAD
                                 new XElement("Category", "Övrigt",
                                 new XAttribute("id", 0),
                                 new XAttribute("value", "Övrigt"))));
+=======
+                                new XElement("Category", "Skräck",
+                                new XAttribute("value", "Skräck"),
+                                new XAttribute("id", 0))));
+
+>>>>>>> 3f70a386699582bf3e97c2167b51d4f5c0db9392
 
                 string categoryPath = LocalPath + @"\Categories\";
                 CreateDirectory(categoryPath);
@@ -65,8 +74,11 @@ namespace WindowsFormsApp1
             }
         }
         public void WriteNewCategory(string name)
+        public void CreateCategory(string name)
         {
             int id = GetCategoryId();
+            XmlReader xr = new XmlReader();
+            int id = xr.GetCategoryId();
             XDocument xDoc = XDocument.Load(LocalPath + @"\Categories\Categories.xml");
             XElement category = xDoc.Element("Categories");
             category.Add(new XElement("Category", name,
@@ -123,6 +135,7 @@ namespace WindowsFormsApp1
         }
 
         public void UpdateCategory(string input, string category)
+        public virtual void UpdateCategory(string input, string category)
         {
             XDocument doc = XDocument.Load(LocalPath + @"\Categories\Categories.xml");
 
