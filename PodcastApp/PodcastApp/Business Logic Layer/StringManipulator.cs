@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace WindowsFormsApp1
 {
-   public class StringManipulator
+    public class StringManipulator
     {
         // Removes special characters from a string
         public string RemoveSpecialChars(string input)
@@ -27,7 +27,7 @@ namespace WindowsFormsApp1
             if (xmlString == null)
                 throw new ArgumentNullException("xmlString");
 
-               return xmlString.Replace("&", "&amp;");
+            return xmlString.Replace("&", "&amp;");
         }
 
         public static string UnescapeXMLValue(string xmlString)
@@ -56,5 +56,5 @@ namespace WindowsFormsApp1
             }
             return UnescapeXMLValue(textWithoutTags);
         }
-    } 
+    }
 }
