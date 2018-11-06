@@ -16,13 +16,6 @@ namespace WindowsFormsApp1
             return xr.GetCategories();
         }
 
-        public int GetCategoeryId()
-        {
-            XmlReader xr = new XmlReader();
-            return xr.GetCategoryId();
-        }
-     
-
         public override void UpdateCategory(string input, string category)
         {
             Validate val = new Validate();
